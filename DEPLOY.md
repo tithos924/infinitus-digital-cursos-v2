@@ -27,13 +27,7 @@ Na Vercel:
    - `DATABASE_URL` — connection string do Neon/Supabase
    - `JWT_ACCESS_SECRET` — uma string aleatória longa (ex: gerar com `openssl rand -hex 32`)
    - `WEB_ORIGIN` — URL do frontend (preencher depois do passo 3, ex: `https://infinitus-web.vercel.app`)
-5. Deploy.
-6. Depois do primeiro deploy, corre as migrações Prisma uma vez (a partir do teu computador ou via Vercel CLI):
-   ```
-   cd apps/api
-   npx prisma migrate deploy
-   ```
-   (precisa do `DATABASE_URL` no `.env` local apontando para a mesma base de dados)
+5. Deploy. O comando `vercel-build` já corre `prisma generate` e `prisma db push` automaticamente durante o build, por isso as tabelas são criadas na primeira vez que fizeres deploy — não precisas de terminal nem de correr nada manualmente.
 
 ## 3. Deploy do Frontend (`apps/web`)
 

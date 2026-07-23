@@ -7,7 +7,7 @@
     "start": "node dist/main",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
-    "vercel-build": "prisma generate",
+    "vercel-build": "prisma generate && prisma db push --accept-data-loss",
     "postinstall": "prisma generate"
   },
   "dependencies": {
