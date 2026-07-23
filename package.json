@@ -1,0 +1,12 @@
+{
+  "name": "infinitus-digital-cursos",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace apps/web run dev",
+    "dev:api": "npm --workspace apps/api run start:dev"
+  }
+}
