@@ -8,6 +8,7 @@ type Lesson = {
   id: string;
   title: string;
   videoUrl?: string | null;
+  imageUrl?: string | null;
   contentHtml?: string | null;
   order: number;
 };
@@ -16,6 +17,7 @@ type ModuleType = {
   id: string;
   title: string;
   order: number;
+  imageUrl?: string | null;
   lessons: Lesson[];
 };
 
@@ -33,6 +35,7 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
   const [modules, setModules] = useState<ModuleType[]>([]);
   const [openModule, setOpenModule] = useState<string | null>(null);
   const [newModuleTitle, setNewModuleTitle] = useState('');
+  const [newModuleImage, setNewModuleImage] = useState('');
 
   function reload() {
     if (!token) return;
@@ -48,9 +51,10 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
     await api(`/courses/${id}/modules`, {
       method: 'POST',
       token,
-      body: JSON.stringify({ title: newModuleTitle }),
+      body: JSON.stringify({ title: newModuleTitle, imageUrl: newModuleImage || undefined }),
     });
     setNewModuleTitle('');
+    setNewModuleImage('');
     reload();
   }
 
@@ -89,16 +93,24 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
         </button>
       </div>
 
-      <form onSubmit={createModule} className="flex gap-2">
+      <form onSubmit={createModule} className="space-y-2">
+        <div className="flex gap-2">
+          <input
+            placeholder="Título do novo módulo (ex: Módulo 1 — Introdução)"
+            value={newModuleTitle}
+            onChange={(e) => setNewModuleTitle(e.target.value)}
+            className="flex-1 bg-white border border-black/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+          />
+          <button className="flex items-center gap-1 bg-brand-black text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-brand-orange transition-colors">
+            <Plus size={16} /> Módulo
+          </button>
+        </div>
         <input
-          placeholder="Título do novo módulo (ex: Módulo 1 — Introdução)"
-          value={newModuleTitle}
-          onChange={(e) => setNewModuleTitle(e.target.value)}
-          className="flex-1 bg-white border border-black/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+          placeholder="URL da imagem do módulo (opcional)"
+          value={newModuleImage}
+          onChange={(e) => setNewModuleImage(e.target.value)}
+          className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
         />
-        <button className="flex items-center gap-1 bg-brand-black text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-brand-orange transition-colors">
-          <Plus size={16} /> Módulo
-        </button>
       </form>
 
       <div className="space-y-3">
@@ -110,6 +122,10 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
             >
               <span className="flex items-center gap-2 font-medium">
                 <GripVertical size={16} className="text-black/30" />
+                {m.imageUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={m.imageUrl} alt={m.title} className="w-8 h-8 rounded-md object-cover" />
+                )}
                 {m.title}
                 <span className="text-xs text-black/40 font-normal">({m.lessons.length} aulas)</span>
               </span>
@@ -156,6 +172,7 @@ function LessonList({
   const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [content, setContent] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -167,10 +184,11 @@ function LessonList({
       await api(`/modules/${moduleId}/lessons`, {
         method: 'POST',
         token,
-        body: JSON.stringify({ title, videoUrl, contentHtml: content }),
+        body: JSON.stringify({ title, videoUrl, imageUrl, contentHtml: content }),
       });
       setTitle('');
       setVideoUrl('');
+      setImageUrl('');
       setContent('');
       setShowForm(false);
       onChange();
@@ -190,7 +208,14 @@ function LessonList({
       {lessons.map((l) => (
         <div key={l.id} className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-brand-light">
           <span className="flex items-center gap-2 text-sm">
-            {l.videoUrl ? <Video size={15} className="text-brand-orange" /> : <FileText size={15} className="text-black/40" />}
+            {l.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={l.imageUrl} alt={l.title} className="w-7 h-7 rounded object-cover" />
+            ) : l.videoUrl ? (
+              <Video size={15} className="text-brand-orange" />
+            ) : (
+              <FileText size={15} className="text-black/40" />
+            )}
             {l.title}
           </span>
           <Trash2 size={15} className="text-black/30 hover:text-red-500 cursor-pointer" onClick={() => deleteLesson(l.id)} />
@@ -210,6 +235,12 @@ function LessonList({
             placeholder="URL do vídeo (YouTube, Vimeo, Bunny.net...)"
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
+            className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+          />
+          <input
+            placeholder="URL da imagem/miniatura da aula (opcional)"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
             className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <textarea

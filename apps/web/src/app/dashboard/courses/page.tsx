@@ -19,6 +19,7 @@ export default function CoursesPage() {
   const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [coverImageUrl, setCoverImageUrl] = useState('');
   const [price, setPrice] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -37,10 +38,11 @@ export default function CoursesPage() {
       await api('/courses', {
         method: 'POST',
         token,
-        body: JSON.stringify({ title, description, price: Number(price) || 0 }),
+        body: JSON.stringify({ title, description, coverImageUrl, price: Number(price) || 0 }),
       });
       setTitle('');
       setDescription('');
+      setCoverImageUrl('');
       setPrice('');
       setShowForm(false);
       loadCourses();
@@ -81,6 +83,12 @@ export default function CoursesPage() {
             className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <input
+            placeholder="URL da imagem de capa (ex: link do Cloudinary, Imgur, etc.)"
+            value={coverImageUrl}
+            onChange={(e) => setCoverImageUrl(e.target.value)}
+            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+          />
+          <input
             type="number"
             placeholder="Preço (Kz)"
             value={price}
@@ -99,8 +107,13 @@ export default function CoursesPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {courses.map((c) => (
           <div key={c.id} className="bg-white rounded-xl2 border border-black/5 shadow-sm overflow-hidden">
-            <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold">
-              {c.title[0]?.toUpperCase()}
+            <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold overflow-hidden">
+              {c.coverImageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={c.coverImageUrl} alt={c.title} className="w-full h-full object-cover" />
+              ) : (
+                c.title[0]?.toUpperCase()
+              )}
             </div>
             <div className="p-5 space-y-3">
               <h3 className="font-medium">{c.title}</h3>

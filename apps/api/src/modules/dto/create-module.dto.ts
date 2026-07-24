@@ -8,4 +8,8 @@ export class CreateModuleDto {
   @IsOptional()
   @IsInt()
   order?: number;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
 }

@@ -15,6 +15,7 @@ export class LessonsService {
       data: {
         title: dto.title,
         videoUrl: dto.videoUrl,
+        imageUrl: dto.imageUrl,
         contentHtml: dto.contentHtml,
         order: dto.order ?? count,
         moduleId,

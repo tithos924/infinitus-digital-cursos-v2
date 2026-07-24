@@ -9,4 +9,8 @@ export class UpdateModuleDto {
   @IsOptional()
   @IsInt()
   order?: number;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
 }

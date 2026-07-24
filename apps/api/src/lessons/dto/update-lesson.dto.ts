@@ -12,6 +12,10 @@ export class UpdateLessonDto {
 
   @IsOptional()
   @IsString()
+  imageUrl?: string;
+
+  @IsOptional()
+  @IsString()
   contentHtml?: string;
 
   @IsOptional()

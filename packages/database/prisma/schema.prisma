@@ -79,6 +79,7 @@ model Module {
   id        String   @id @default(uuid())
   title     String
   order     Int      @default(0)
+  imageUrl  String?
   courseId  String
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons   Lesson[]
@@ -89,6 +90,7 @@ model Lesson {
   title       String
   order       Int      @default(0)
   videoUrl    String?
+  imageUrl    String?
   contentHtml String?
   moduleId    String
   module      Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)

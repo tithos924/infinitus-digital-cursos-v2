@@ -14,6 +14,7 @@ export class ModulesService {
       data: {
         title: dto.title,
         order: dto.order ?? count,
+        imageUrl: dto.imageUrl,
         courseId,
       },
     });
