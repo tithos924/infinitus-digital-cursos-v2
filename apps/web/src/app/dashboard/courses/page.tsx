@@ -1,9 +1,10 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Plus, Users, Layers } from 'lucide-react';
+import { Plus, Users, Layers, Trash2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { ImageUploader } from '@/components/ImageUploader';
 
 type Course = {
   id: string;
@@ -51,6 +52,13 @@ export default function CoursesPage() {
     }
   }
 
+  async function deleteCourse(id: string, courseTitle: string) {
+    if (!token) return;
+    if (!confirm(`Remover o curso "${courseTitle}"? Esta ação não pode ser desfeita.`)) return;
+    await api(`/courses/${id}`, { method: 'DELETE', token });
+    loadCourses();
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -82,12 +90,7 @@ export default function CoursesPage() {
             rows={3}
             className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
-          <input
-            placeholder="URL da imagem de capa (ex: link do Cloudinary, Imgur, etc.)"
-            value={coverImageUrl}
-            onChange={(e) => setCoverImageUrl(e.target.value)}
-            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
-          />
+          <ImageUploader label="Imagem de capa do curso" value={coverImageUrl} onChange={setCoverImageUrl} />
           <input
             type="number"
             placeholder="Preço (Kz)"
@@ -107,13 +110,20 @@ export default function CoursesPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {courses.map((c) => (
           <div key={c.id} className="bg-white rounded-xl2 border border-black/5 shadow-sm overflow-hidden">
-            <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold overflow-hidden">
+            <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold overflow-hidden relative">
               {c.coverImageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={c.coverImageUrl} alt={c.title} className="w-full h-full object-cover" />
               ) : (
                 c.title[0]?.toUpperCase()
               )}
+              <button
+                onClick={() => deleteCourse(c.id, c.title)}
+                className="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1.5 hover:bg-red-500 transition-colors"
+                title="Remover curso"
+              >
+                <Trash2 size={14} />
+              </button>
             </div>
             <div className="p-5 space-y-3">
               <h3 className="font-medium">{c.title}</h3>

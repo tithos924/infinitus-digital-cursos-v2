@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Plus, Trash2, Video, FileText, GripVertical, ChevronDown, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { ImageUploader } from '@/components/ImageUploader';
 
 type Lesson = {
   id: string;
@@ -105,12 +106,7 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
             <Plus size={16} /> Módulo
           </button>
         </div>
-        <input
-          placeholder="URL da imagem do módulo (opcional)"
-          value={newModuleImage}
-          onChange={(e) => setNewModuleImage(e.target.value)}
-          className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
-        />
+        <ImageUploader label="Imagem do módulo (opcional)" value={newModuleImage} onChange={setNewModuleImage} />
       </form>
 
       <div className="space-y-3">
@@ -237,12 +233,7 @@ function LessonList({
             onChange={(e) => setVideoUrl(e.target.value)}
             className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
-          <input
-            placeholder="URL da imagem/miniatura da aula (opcional)"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
-          />
+          <ImageUploader label="Miniatura da aula (opcional)" value={imageUrl} onChange={setImageUrl} />
           <textarea
             placeholder="Conteúdo / notas da aula"
             rows={2}
