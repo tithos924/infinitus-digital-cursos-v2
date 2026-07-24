@@ -4,8 +4,10 @@ export default function LandingPage() {
   return (
     <main className="min-h-screen flex flex-col">
       <header className="flex items-center justify-between px-8 py-6 max-w-6xl mx-auto w-full">
-        <span className="text-xl font-semibold tracking-tight">
-          Infinit<span className="text-brand-orange">∞</span>s Digital Cursos
+        <span className="flex items-center gap-2 text-xl font-semibold tracking-tight">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="Infinitus Digital Cursos" className="h-8 w-8 object-contain" />
+          Infinitus Digital Cursos
         </span>
         <div className="flex items-center gap-3">
           <Link href="/login" className="text-sm font-medium text-black/70 hover:text-black">

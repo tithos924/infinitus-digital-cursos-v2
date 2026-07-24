@@ -44,9 +44,13 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
           open ? 'translate-x-0' : '-translate-x-full',
         )}
       >
-        <div className="px-6 py-7">
-          <span className="text-xl font-semibold tracking-tight">
-            Infinit<span className="text-brand-orange">∞</span>s
+        <div className="px-6 py-7 flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="Infinitus Digital Cursos" className="h-8 w-8 object-contain" />
+          <span className="text-base font-semibold tracking-tight leading-tight">
+            Infinitus
+            <br />
+            Digital Cursos
           </span>
         </div>
         <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
