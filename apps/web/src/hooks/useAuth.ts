@@ -37,7 +37,7 @@ export function useAuth() {
     window.sessionStorage.setItem(TOKEN_KEY, data.accessToken);
     setToken(data.accessToken);
     setUser(data.user);
-    router.push('/dashboard');
+    router.push(data.user.role === 'STUDENT' ? '/aluno' : '/dashboard');
   }, [router]);
 
   const register = useCallback(async (name: string, email: string, password: string) => {
@@ -45,7 +45,7 @@ export function useAuth() {
     window.sessionStorage.setItem(TOKEN_KEY, data.accessToken);
     setToken(data.accessToken);
     setUser(data.user);
-    router.push('/dashboard');
+    router.push(data.user.role === 'STUDENT' ? '/aluno' : '/dashboard');
   }, [router]);
 
   const logout = useCallback(async () => {

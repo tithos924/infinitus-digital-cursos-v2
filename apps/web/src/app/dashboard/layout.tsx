@@ -12,6 +12,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
+    else if (!loading && user && user.role === 'STUDENT') router.push('/aluno');
   }, [loading, user, router]);
 
   if (loading) {

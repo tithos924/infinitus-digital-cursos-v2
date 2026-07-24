@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -56,10 +55,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-sm text-center text-black/50 mt-6">
-          Não tens conta?{' '}
-          <Link href="/register" className="text-brand-orange font-medium">
-            Regista-te
-          </Link>
+          Sem acesso ainda? Fala com o administrador da plataforma.
         </p>
       </div>
     </main>

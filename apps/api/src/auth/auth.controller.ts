@@ -1,8 +1,10 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 const REFRESH_COOKIE = 'refresh_token';
 
@@ -37,6 +39,12 @@ export class AuthController {
     const token = bodyToken || req?.cookies?.[REFRESH_COOKIE];
     res.clearCookie(REFRESH_COOKIE);
     return this.authService.logout(token);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('promote-first-admin')
+  promoteFirstAdmin(@CurrentUser() user: any) {
+    return this.authService.promoteFirstAdmin(user.sub);
   }
 
   private setRefreshCookie(res: Response, token: string) {

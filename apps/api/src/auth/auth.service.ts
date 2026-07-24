@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -20,6 +21,13 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
+    const adminExists = await this.prisma.user.count({ where: { role: 'ADMIN' } });
+    if (adminExists > 0) {
+      throw new ForbiddenException(
+        'O registo público está desativado. Fala com o administrador da plataforma para receberes acesso.',
+      );
+    }
+
     const existing = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -31,10 +39,19 @@ export class AuthService {
         name: dto.name,
         email: dto.email,
         passwordHash,
+        role: 'ADMIN',
       },
     });
 
     return this.issueTokens(user.id, user.role);
+  }
+
+  async promoteFirstAdmin(userId: string) {
+    const adminExists = await this.prisma.user.count({ where: { role: 'ADMIN' } });
+    if (adminExists > 0) {
+      throw new ForbiddenException('Já existe um administrador nesta plataforma.');
+    }
+    return this.prisma.user.update({ where: { id: userId }, data: { role: 'ADMIN' } });
   }
 
   async login(dto: LoginDto) {
