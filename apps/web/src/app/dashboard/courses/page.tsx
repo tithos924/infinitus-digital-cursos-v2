@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Plus, Users, Layers } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -112,12 +113,18 @@ export default function CoursesPage() {
                 </span>
               </div>
               <div className="flex gap-2 pt-1">
-                <button className="flex-1 text-xs font-medium border border-black/10 rounded-full py-2 hover:bg-brand-light">
+                <Link
+                  href={`/dashboard/courses/${c.id}`}
+                  className="flex-1 text-center text-xs font-medium border border-black/10 rounded-full py-2 hover:bg-brand-light"
+                >
                   Editar
-                </button>
-                <button className="flex-1 text-xs font-medium border border-black/10 rounded-full py-2 hover:bg-brand-light">
+                </Link>
+                <Link
+                  href={`/dashboard/courses/${c.id}`}
+                  className="flex-1 text-center text-xs font-medium border border-black/10 rounded-full py-2 hover:bg-brand-light"
+                >
                   Gerir
-                </button>
+                </Link>
               </div>
             </div>
           </div>
