@@ -1,8 +1,27 @@
 'use client';
+import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { api } from '@/lib/api';
 
 export default function Page() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function promote() {
+    if (!token) return;
+    setLoading(true);
+    setMessage('');
+    try {
+      await api('/auth/promote-first-admin', { method: 'POST', token });
+      setMessage('Pronto! Agora és administrador — sai e entra outra vez para veres o dashboard.');
+    } catch (err: any) {
+      setMessage(err.message || 'Não foi possível tornar-te administrador.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="space-y-4 max-w-md">
       <h1 className="text-2xl font-semibold">Configurações</h1>
@@ -16,6 +35,24 @@ export default function Page() {
           <p className="text-sm font-medium">{user?.email}</p>
         </div>
       </div>
+
+      {user?.role !== 'ADMIN' && (
+        <div className="bg-white rounded-xl2 border border-black/5 shadow-sm p-6 space-y-3">
+          <p className="text-sm font-medium">Tornar-me Administrador</p>
+          <p className="text-xs text-black/50">
+            Usa isto uma única vez para ativares a tua conta como administrador da plataforma
+            (só funciona se ainda não existir nenhum administrador).
+          </p>
+          <button
+            onClick={promote}
+            disabled={loading}
+            className="bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 disabled:opacity-60"
+          >
+            {loading ? 'A processar...' : 'Tornar-me Administrador'}
+          </button>
+          {message && <p className="text-xs text-black/60">{message}</p>}
+        </div>
+      )}
     </div>
   );
 }
