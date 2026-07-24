@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: infinitus-digital-cursos-api
+    runtime: node
+    plan: free
+    buildCommand: npm install && npx prisma generate && npx prisma db push --accept-data-loss && npm run build
+    startCommand: npm run start:prod
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: WEB_ORIGIN
+        sync: false
+      - key: PORT
+        value: 10000

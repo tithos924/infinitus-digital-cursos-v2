@@ -1,50 +1,49 @@
 # Guia de Deploy — Infinitus Digital Cursos
 
-Este projeto tem **2 partes que se publicam separadamente na Vercel**:
+Este projeto tem **2 partes com hospedagem diferente**:
 
-1. `apps/api` — Backend NestJS + Prisma (API REST)
-2. `apps/web` — Frontend Next.js
+1. `apps/api` — Backend NestJS + Prisma → **Render.com** (servidor Node normal, "sempre ligado")
+2. `apps/web` — Frontend Next.js → **Vercel**
+
+(A API não fica bem na Vercel porque a Vercel só corre funções serverless isoladas, o que não combina com um servidor NestJS tradicional.)
 
 ## 1. Base de dados PostgreSQL
 
-Precisamos de um Postgres acessível pela internet. Opções gratuitas:
+Já configurado com o Neon (https://neon.tech). A connection string vai na variável `DATABASE_URL`.
 
-- Neon: https://neon.tech (recomendado, grátis, serverless Postgres)
-- Supabase: https://supabase.com
+## 2. Deploy da API no Render
 
-Passos:
-1. Cria uma conta e um novo projeto/base de dados.
-2. Copia a "Connection string" (formato `postgresql://user:password@host/db?sslmode=require`).
-3. Guarda esse valor — vai para a variável `DATABASE_URL`.
+1. Cria conta em https://render.com (podes usar login do GitHub).
+2. "New" → "Web Service" → escolhe o repositório `infinitus-digital-cursos-v2`.
+3. Root Directory: `apps/api`
+4. Runtime: Node
+5. Build Command: `npm install && npx prisma generate && npx prisma db push --accept-data-loss && npm run build`
+6. Start Command: `npm run start:prod`
+7. Plano: Free
+8. Variáveis de ambiente:
+   - `DATABASE_URL` — connection string do Neon
+   - `JWT_ACCESS_SECRET` — string aleatória longa
+   - `WEB_ORIGIN` — URL do site na Vercel (atualizar depois do passo 3)
+9. Cria o serviço. O Render vai buildar e o teu primeiro deploy demora ~3-5 min.
+10. Copia o URL final (algo como `https://infinitus-digital-cursos-api.onrender.com`).
 
-## 2. Deploy da API (`apps/api`)
+Nota: no plano free do Render, o servidor "adormece" após 15 min sem uso e demora ~30s a acordar no primeiro pedido — normal, não é erro.
 
-Na Vercel:
-1. "Add New Project" → importar este repositório GitHub.
-2. Em "Root Directory", escolhe `apps/api`.
-3. Framework Preset: Other.
-4. Variáveis de ambiente:
-   - `DATABASE_URL` — connection string do Neon/Supabase
-   - `JWT_ACCESS_SECRET` — uma string aleatória longa (ex: gerar com `openssl rand -hex 32`)
-   - `WEB_ORIGIN` — URL do frontend (preencher depois do passo 3, ex: `https://infinitus-web.vercel.app`)
-5. Deploy. O comando `vercel-build` já corre `prisma generate` e `prisma db push` automaticamente durante o build, por isso as tabelas são criadas na primeira vez que fizeres deploy — não precisas de terminal nem de correr nada manualmente.
+## 3. Deploy do Frontend na Vercel
 
-## 3. Deploy do Frontend (`apps/web`)
-
-Na Vercel:
 1. "Add New Project" → mesmo repositório.
-2. Root Directory: `apps/web`.
-3. Framework Preset: Next.js (detetado automaticamente).
+2. Root Directory: `apps/web`
+3. Framework: Next.js (automático)
 4. Variável de ambiente:
-   - `NEXT_PUBLIC_API_URL` — URL da API + `/api`, ex: `https://infinitus-api.vercel.app/api`
+   - `NEXT_PUBLIC_API_URL` — URL da API do Render + `/api`, ex: `https://infinitus-digital-cursos-api.onrender.com/api`
 5. Deploy.
 
 ## 4. Atualizar CORS
 
-Depois de teres a URL final do frontend, volta ao projeto da API na Vercel e atualiza `WEB_ORIGIN` com essa URL, depois faz redeploy.
+Depois de teres o URL final do site, volta ao Render → o teu serviço → Environment → atualiza `WEB_ORIGIN` com esse URL → guarda (o Render reinicia sozinho).
 
 ## 5. Testar
 
-- Abre o frontend → Criar conta → deves cair no `/dashboard`.
+- Abre o site → Criar conta → deves cair no `/dashboard`.
 - Cria um curso em "Meus Cursos".
 - Confirma que aparece no dashboard e na tabela "Últimos cursos".
