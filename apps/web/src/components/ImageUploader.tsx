@@ -42,10 +42,10 @@ export function ImageUploader({
       if (data.secure_url) {
         onChange(data.secure_url);
       } else {
-        setError('Falha ao carregar a imagem.');
+        setError(data.error?.message || 'Falha ao carregar a imagem.');
       }
     } catch {
-      setError('Falha ao carregar a imagem.');
+      setError('Falha ao carregar a imagem (erro de rede).');
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = '';
