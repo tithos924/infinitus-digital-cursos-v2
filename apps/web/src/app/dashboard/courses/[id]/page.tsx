@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, use as usePromise } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Trash2, Video, FileText, GripVertical, ChevronDown, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
@@ -26,8 +26,8 @@ type Course = {
   status: string;
 };
 
-export default function CourseEditorPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = usePromise(params);
+export default function CourseEditorPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const { token } = useAuth();
   const [course, setCourse] = useState<Course | null>(null);
   const [modules, setModules] = useState<ModuleType[]>([]);
