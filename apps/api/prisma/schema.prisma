@@ -111,7 +111,7 @@ model Enrollment {
   userId     String
   user       User     @relation(fields: [userId], references: [id])
   courseId   String
-  course     Course   @relation(fields: [courseId], references: [id])
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   progressPct Int     @default(0)
   createdAt  DateTime @default(now())
 
@@ -137,7 +137,7 @@ model Certificate {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   pdfUrl    String?
   issuedAt  DateTime @default(now())
 
@@ -149,7 +149,7 @@ model Sale {
   userId        String
   user          User       @relation(fields: [userId], references: [id])
   courseId      String
-  course        Course     @relation(fields: [courseId], references: [id])
+  course        Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
   amount        Decimal    @db.Decimal(10, 2)
   status        SaleStatus @default(PENDING)
   provider      String
@@ -163,7 +163,7 @@ model Comment {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 
@@ -174,7 +174,7 @@ model Review {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@unique([userId, courseId])

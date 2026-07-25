@@ -55,8 +55,12 @@ export default function CoursesPage() {
   async function deleteCourse(id: string, courseTitle: string) {
     if (!token) return;
     if (!confirm(`Remover o curso "${courseTitle}"? Esta ação não pode ser desfeita.`)) return;
-    await api(`/courses/${id}`, { method: 'DELETE', token });
-    loadCourses();
+    try {
+      await api(`/courses/${id}`, { method: 'DELETE', token });
+      loadCourses();
+    } catch (err: any) {
+      alert(err.message || 'Não foi possível remover o curso.');
+    }
   }
 
   return (
