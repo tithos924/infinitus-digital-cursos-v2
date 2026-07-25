@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 
 export default function Page() {
-  const { user, token } = useAuth();
+  const { user, token, logout } = useAuth();
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [adminExists, setAdminExists] = useState(true);
@@ -41,6 +42,13 @@ export default function Page() {
           <p className="text-sm font-medium">{user?.email}</p>
         </div>
       </div>
+
+      <button
+        onClick={logout}
+        className="flex items-center gap-2 bg-white border border-black/10 text-black/70 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-brand-light transition-colors"
+      >
+        <LogOut size={16} /> Sair da conta
+      </button>
 
       {user?.role !== 'ADMIN' && !adminExists && (
         <div className="bg-white rounded-xl2 border border-black/5 shadow-sm p-6 space-y-3">
