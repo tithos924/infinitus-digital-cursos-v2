@@ -46,6 +46,11 @@ export class AuthService {
     return this.issueTokens(user.id, user.role);
   }
 
+  async adminExists() {
+    const count = await this.prisma.user.count({ where: { role: 'ADMIN' } });
+    return { exists: count > 0 };
+  }
+
   async promoteFirstAdmin(userId: string) {
     const adminExists = await this.prisma.user.count({ where: { role: 'ADMIN' } });
     if (adminExists > 0) {

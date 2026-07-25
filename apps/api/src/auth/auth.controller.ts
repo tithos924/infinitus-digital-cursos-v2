@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -39,6 +39,11 @@ export class AuthController {
     const token = bodyToken || req?.cookies?.[REFRESH_COOKIE];
     res.clearCookie(REFRESH_COOKIE);
     return this.authService.logout(token);
+  }
+
+  @Get('admin-exists')
+  adminExists() {
+    return this.authService.adminExists();
   }
 
   @UseGuards(JwtAuthGuard)

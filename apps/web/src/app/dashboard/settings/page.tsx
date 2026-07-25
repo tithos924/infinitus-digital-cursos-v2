@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 
@@ -7,6 +7,11 @@ export default function Page() {
   const { user, token } = useAuth();
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [adminExists, setAdminExists] = useState(true);
+
+  useEffect(() => {
+    api('/auth/admin-exists').then((r) => setAdminExists(r.exists)).catch(() => setAdminExists(true));
+  }, []);
 
   async function promote() {
     if (!token) return;
@@ -15,6 +20,7 @@ export default function Page() {
     try {
       await api('/auth/promote-first-admin', { method: 'POST', token });
       setMessage('Pronto! Agora és administrador — recarrega a página.');
+      setAdminExists(true);
     } catch (err: any) {
       setMessage(err.message || 'Não foi possível tornar-te administrador.');
     } finally {
@@ -41,12 +47,11 @@ export default function Page() {
         </div>
       </div>
 
-      {user?.role !== 'ADMIN' && (
+      {user?.role !== 'ADMIN' && !adminExists && (
         <div className="bg-white rounded-xl2 border border-black/5 shadow-sm p-6 space-y-3">
           <p className="text-sm font-medium">Tornar-me Administrador</p>
           <p className="text-xs text-black/50">
-            Usa isto uma única vez para ativares a tua conta como administrador da plataforma
-            (só funciona se ainda não existir nenhum administrador).
+            Usa isto uma única vez para ativares a tua conta como administrador da plataforma.
           </p>
           <button
             onClick={promote}
