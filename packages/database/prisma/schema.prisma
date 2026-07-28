@@ -168,6 +168,16 @@ model Comment {
   createdAt DateTime @default(now())
 }
 
+model Tool {
+  id          String   @id @default(uuid())
+  name        String
+  url         String
+  description String?
+  category    String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
 model Review {
   id        String   @id @default(uuid())
   rating    Int

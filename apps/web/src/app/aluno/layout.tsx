@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { GraduationCap, FileBadge, Settings, LogOut } from 'lucide-react';
+import { GraduationCap, FileBadge, Wrench, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useAuth } from '@/hooks/useAuth';
@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 const items = [
   { href: '/aluno', label: 'Meus Cursos', icon: GraduationCap },
   { href: '/aluno/certificados', label: 'Certificados', icon: FileBadge },
+  { href: '/aluno/ferramentas', label: 'Ferramentas', icon: Wrench },
   { href: '/aluno/configuracoes', label: 'Configurações', icon: Settings },
 ];
 

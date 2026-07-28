@@ -11,6 +11,7 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  Wrench,
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useAuth } from '@/hooks/useAuth';
@@ -20,6 +21,7 @@ const items = [
   { href: '/dashboard/courses', label: 'Meus Cursos', icon: BookOpen },
   { href: '/dashboard/students', label: 'Alunos', icon: GraduationCap },
   { href: '/dashboard/lessons', label: 'Aulas', icon: Clapperboard },
+  { href: '/dashboard/tools', label: 'Ferramentas', icon: Wrench },
   { href: '/dashboard/certificates', label: 'Certificados', icon: FileBadge },
   { href: '/dashboard/sales', label: 'Vendas', icon: Wallet },
   { href: '/dashboard/reports', label: 'Relatórios', icon: BarChart3 },
