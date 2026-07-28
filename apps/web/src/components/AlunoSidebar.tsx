@@ -1,16 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BookOpen, MessageCircle, FileBadge, Wrench, Settings, LogOut } from 'lucide-react';
+import { Home, FileBadge, Wrench, Settings, LogOut } from 'lucide-react';
 import clsx from 'clsx';
 import { useAuth } from '@/hooks/useAuth';
 
 const items = [
   { href: '/aluno', label: 'Dashboard', icon: Home },
-  { href: '/aluno/aulas', label: 'Aulas', icon: BookOpen },
-  { href: '/aluno/conversas', label: 'Conversas', icon: MessageCircle },
-  { href: '/aluno/ferramentas', label: 'Ferramentas', icon: Wrench },
   { href: '/aluno/certificados', label: 'Certificados', icon: FileBadge },
+  { href: '/aluno/ferramentas', label: 'Ferramentas', icon: Wrench },
   { href: '/aluno/configuracoes', label: 'Configurações', icon: Settings },
 ];
 
