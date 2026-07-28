@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { Bell, Search, Menu } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -26,12 +27,21 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         <button className="relative text-black/50 hover:text-black transition-colors">
           <Bell size={20} strokeWidth={1.75} />
         </button>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-brand-orange/15 flex items-center justify-center text-brand-orange text-sm font-semibold shrink-0">
-            {user?.name?.[0]?.toUpperCase() ?? '?'}
-          </div>
+        <Link href="/dashboard/settings" className="flex items-center gap-2">
+          {user?.avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={user.avatarUrl}
+              alt={user?.name || 'Perfil'}
+              className="w-8 h-8 rounded-full object-cover shrink-0"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-brand-orange/15 flex items-center justify-center text-brand-orange text-sm font-semibold shrink-0">
+              {user?.name?.[0]?.toUpperCase() ?? '?'}
+            </div>
+          )}
           <span className="hidden md:inline text-sm font-medium">{user?.name ?? '...'}</span>
-        </div>
+        </Link>
       </div>
     </header>
   );

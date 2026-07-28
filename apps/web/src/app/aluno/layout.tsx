@@ -38,6 +38,7 @@ export default function AlunoLayout({ children }: { children: React.ReactNode })
         <nav className="flex items-center gap-1">
           {items.map(({ href, label, icon: Icon }) => {
             const active = pathname === href;
+            const isProfileLink = href === '/aluno/configuracoes';
             return (
               <Link
                 key={href}
@@ -47,7 +48,12 @@ export default function AlunoLayout({ children }: { children: React.ReactNode })
                   active ? 'bg-brand-orange/10 text-brand-orange' : 'text-black/60 hover:bg-brand-light',
                 )}
               >
-                <Icon size={16} strokeWidth={1.75} />
+                {isProfileLink && user.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={user.avatarUrl} alt={user.name} className="w-5 h-5 rounded-full object-cover" />
+                ) : (
+                  <Icon size={16} strokeWidth={1.75} />
+                )}
                 <span className="hidden sm:inline">{label}</span>
               </Link>
             );
