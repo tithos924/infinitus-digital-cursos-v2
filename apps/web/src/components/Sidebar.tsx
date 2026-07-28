@@ -12,6 +12,7 @@ import {
   Settings,
   LogOut,
   Wrench,
+  Image as ImageIcon,
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useAuth } from '@/hooks/useAuth';
@@ -22,6 +23,7 @@ const items = [
   { href: '/dashboard/students', label: 'Alunos', icon: GraduationCap },
   { href: '/dashboard/lessons', label: 'Aulas', icon: Clapperboard },
   { href: '/dashboard/tools', label: 'Ferramentas', icon: Wrench },
+  { href: '/dashboard/banners', label: 'Banners', icon: ImageIcon },
   { href: '/dashboard/certificates', label: 'Certificados', icon: FileBadge },
   { href: '/dashboard/sales', label: 'Vendas', icon: Wallet },
   { href: '/dashboard/reports', label: 'Relatórios', icon: BarChart3 },

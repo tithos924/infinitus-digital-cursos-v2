@@ -168,6 +168,16 @@ model Comment {
   createdAt DateTime @default(now())
 }
 
+model Banner {
+  id        String   @id @default(uuid())
+  title     String?
+  imageUrl  String
+  linkUrl   String?
+  active    Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
 model Tool {
   id          String   @id @default(uuid())
   name        String

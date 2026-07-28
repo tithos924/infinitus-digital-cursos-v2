@@ -1,4 +1,6 @@
+'use client';
 import Link from 'next/link';
+import { BannerCarousel } from '@/components/BannerCarousel';
 
 export default function LandingPage() {
   return (
@@ -20,21 +22,26 @@ export default function LandingPage() {
       </header>
 
       <section className="flex-1 flex items-center">
-        <div className="max-w-6xl mx-auto px-8 py-24 text-center w-full">
-          <h1 className="text-5xl md:text-6xl font-semibold tracking-tight leading-tight">
-            A tua plataforma de <span className="text-brand-orange">cursos online</span>
-          </h1>
-          <p className="mt-6 text-lg text-black/60 max-w-2xl mx-auto">
-            Acesso à plataforma é dado pelo administrador. Se já recebeste as tuas
-            credenciais, entra na tua conta abaixo.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <Link
-              href="/login"
-              className="bg-brand-orange text-white px-8 py-3.5 rounded-full font-medium hover:opacity-90 transition-opacity"
-            >
-              Entrar na plataforma
-            </Link>
+        <div className="max-w-6xl mx-auto px-8 py-16 text-center w-full space-y-10">
+          <div>
+            <h1 className="text-5xl md:text-6xl font-semibold tracking-tight leading-tight">
+              A tua plataforma de <span className="text-brand-orange">cursos online</span>
+            </h1>
+            <p className="mt-6 text-lg text-black/60 max-w-2xl mx-auto">
+              Acesso à plataforma é dado pelo administrador. Se já recebeste as tuas
+              credenciais, entra na tua conta abaixo.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-4">
+              <Link
+                href="/login"
+                className="bg-brand-orange text-white px-8 py-3.5 rounded-full font-medium hover:opacity-90 transition-opacity"
+              >
+                Entrar na plataforma
+              </Link>
+            </div>
+          </div>
+          <div className="max-w-3xl mx-auto text-left">
+            <BannerCarousel />
           </div>
         </div>
       </section>
