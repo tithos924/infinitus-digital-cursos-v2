@@ -25,6 +25,10 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm bg-white rounded-xl2 shadow-sm border border-black/5 p-8">
+        <div className="flex justify-center mb-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="Infinitus Digital Cursos" className="h-14 w-14 object-contain" />
+        </div>
         <h1 className="text-2xl font-semibold text-center">Entrar</h1>
         <p className="text-sm text-black/50 text-center mt-1">Acede à tua conta Infinitus</p>
 
