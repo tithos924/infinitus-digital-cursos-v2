@@ -27,7 +27,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         <button className="relative text-black/50 hover:text-black transition-colors">
           <Bell size={20} strokeWidth={1.75} />
         </button>
-        <Link href="/dashboard/settings" className="flex items-center gap-2">
+        <Link href={user?.role === 'STUDENT' ? '/aluno/configuracoes' : '/dashboard/settings'} className="flex items-center gap-2">
           {user?.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
