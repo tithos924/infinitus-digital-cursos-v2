@@ -1,88 +1,104 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { BookOpen, TrendingUp, Award } from 'lucide-react';
-import { StatCard } from '@/components/StatCard';
+import { Search, MessageCircle, GraduationCap, Wrench, Award } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 
-type Enrollment = {
-  id: string;
-  progressPct: number;
-  course: {
-    id: string;
-    title: string;
-    description?: string | null;
-    coverImageUrl?: string | null;
-  };
-};
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Bom dia';
+  if (hour < 19) return 'Boa tarde';
+  return 'Boa noite';
+}
 
 export default function AlunoHomePage() {
   const { token, user } = useAuth();
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const [certificatesCount, setCertificatesCount] = useState(0);
+  const [courseCount, setCourseCount] = useState(0);
 
   useEffect(() => {
     if (!token) return;
-    api('/users/me/enrollments', { token }).then(setEnrollments).catch(() => {});
-    api('/users/me/certificates', { token }).then((c) => setCertificatesCount(c.length)).catch(() => {});
+    api('/users/me/enrollments', { token }).then((e) => setCourseCount(e.length)).catch(() => {});
   }, [token]);
 
-  const avgProgress = enrollments.length
-    ? Math.round(enrollments.reduce((sum, e) => sum + e.progressPct, 0) / enrollments.length)
-    : 0;
+  const firstName = user?.name?.split(' ')[0] ?? '';
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Olá, {user?.name?.split(' ')[0]}</h1>
-        <p className="text-sm text-black/50 mt-1">O teu resumo na plataforma</p>
-      </div>
-
-      <div className="rounded-xl2 overflow-hidden border border-black/5 shadow-sm">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/banner.png" alt="Infinitus Digital" className="w-full h-auto" />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <StatCard label="Cursos ativos" value={enrollments.length} icon={BookOpen} />
-        <StatCard label="Progresso médio" value={`${avgProgress}%`} icon={TrendingUp} />
-        <StatCard label="Certificados" value={certificatesCount} icon={Award} />
-      </div>
-
-      <div>
-        <p className="text-sm font-medium mb-3">Os teus cursos</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          {enrollments.map((e) => (
-            <Link
-              key={e.id}
-              href={`/aluno/cursos/${e.course.id}`}
-              className="bg-white rounded-xl2 border border-black/5 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-            >
-              <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold overflow-hidden">
-                {e.course.coverImageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={e.course.coverImageUrl} alt={e.course.title} className="w-full h-full object-cover" />
-                ) : (
-                  e.course.title[0]?.toUpperCase()
-                )}
-              </div>
-              <div className="p-5 space-y-2">
-                <h3 className="font-medium">{e.course.title}</h3>
-                <div className="w-full bg-brand-light rounded-full h-1.5">
-                  <div className="bg-brand-orange h-1.5 rounded-full" style={{ width: `${e.progressPct}%` }} />
-                </div>
-                <p className="text-xs text-black/40">{e.progressPct}% concluído</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {enrollments.length === 0 && (
-          <p className="text-center text-black/40 text-sm py-16">
-            Ainda não tens acesso a nenhum curso. Fala com o administrador da plataforma.
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1512] via-[#241a12] to-black text-white p-6 md:p-8">
+        <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-brand-orange/10 blur-2xl" />
+        <div className="relative space-y-4">
+          <h1 className="text-2xl md:text-3xl font-semibold leading-snug">
+            {getGreeting()}, <span className="text-brand-orange">{firstName}</span> 👋
+          </h1>
+          <p className="text-white/60 text-sm md:text-base leading-relaxed">
+            APRENDE.<br />
+            EVOLUI.<br />
+            TRANSFORMA.
           </p>
-        )}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex items-center gap-1.5 bg-white/10 border border-white/15 rounded-full px-3 py-1.5 text-xs font-medium">
+              <GraduationCap size={14} /> Infinitus Digital
+            </span>
+            <span className="flex items-center gap-1.5 bg-emerald-500/15 border border-emerald-400/20 text-emerald-400 rounded-full px-3 py-1.5 text-xs font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Acesso ativo · {courseCount} curso{courseCount === 1 ? '' : 's'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-3 border border-black/10 shadow-sm">
+        <Search size={16} className="text-black/40 shrink-0" />
+        <input
+          placeholder="Buscar aulas, cursos, ferramentas..."
+          className="bg-transparent text-sm outline-none w-full placeholder:text-black/40"
+        />
+      </div>
+
+      <div>
+        <p className="text-sm font-medium mb-3">O que queres fazer agora?</p>
+        <div className="grid grid-cols-2 gap-4">
+          <Link
+            href="/aluno/conversas"
+            className="rounded-2xl p-5 bg-gradient-to-br from-orange-900/90 to-orange-950 text-white space-y-6 hover:opacity-90 transition-opacity"
+          >
+            <MessageCircle size={22} />
+            <div>
+              <p className="font-semibold">Entrar no chat</p>
+              <p className="text-xs text-white/60 mt-0.5">Conversa com os membros</p>
+            </div>
+          </Link>
+          <Link
+            href="/aluno/aulas"
+            className="rounded-2xl p-5 bg-gradient-to-br from-blue-900 to-slate-950 text-white space-y-6 hover:opacity-90 transition-opacity"
+          >
+            <GraduationCap size={22} />
+            <div>
+              <p className="font-semibold">Ver cursos</p>
+              <p className="text-xs text-white/60 mt-0.5">Acede às tuas aulas</p>
+            </div>
+          </Link>
+          <Link
+            href="/aluno/ferramentas"
+            className="rounded-2xl p-5 bg-gradient-to-br from-purple-950 to-black text-white space-y-6 hover:opacity-90 transition-opacity"
+          >
+            <Wrench size={22} />
+            <div>
+              <p className="font-semibold">Ferramentas</p>
+              <p className="text-xs text-white/60 mt-0.5">Recursos digitais</p>
+            </div>
+          </Link>
+          <Link
+            href="/aluno/certificados"
+            className="rounded-2xl p-5 bg-gradient-to-br from-emerald-950 to-black text-white space-y-6 hover:opacity-90 transition-opacity"
+          >
+            <Award size={22} />
+            <div>
+              <p className="font-semibold">Certificados</p>
+              <p className="text-xs text-white/60 mt-0.5">Os teus diplomas</p>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AlunoSidebar } from '@/components/AlunoSidebar';
+import { AlunoBottomNav } from '@/components/AlunoBottomNav';
 import { Topbar } from '@/components/Topbar';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -24,8 +25,9 @@ export default function AlunoLayout({ children }: { children: React.ReactNode })
       <AlunoSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 min-w-0">
         <Topbar onMenuClick={() => setSidebarOpen(true)} />
-        <main className="p-4 md:p-8 max-w-5xl mx-auto">{children}</main>
+        <main className="p-4 md:p-8 pb-24 lg:pb-8 max-w-5xl mx-auto">{children}</main>
       </div>
+      <AlunoBottomNav />
     </div>
   );
 }
