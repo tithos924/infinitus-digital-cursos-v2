@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, ExternalLink } from 'lucide-react';
+import { Plus, Trash2, ExternalLink, Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 
@@ -21,6 +21,7 @@ export default function ToolsPage() {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [saving, setSaving] = useState(false);
+  const [seeding, setSeeding] = useState(false);
 
   function reload() {
     if (!token) return;
@@ -55,6 +56,20 @@ export default function ToolsPage() {
     reload();
   }
 
+  async function seedDefaults() {
+    if (!token) return;
+    setSeeding(true);
+    try {
+      const result = await api('/tools/seed-defaults', { method: 'POST', token });
+      reload();
+      if (result.added === 0) {
+        alert('As ferramentas padrão já estavam todas adicionadas.');
+      }
+    } finally {
+      setSeeding(false);
+    }
+  }
+
   const grouped = tools.reduce<Record<string, Tool[]>>((acc, t) => {
     const key = t.category || 'Geral';
     acc[key] = acc[key] || [];
@@ -71,12 +86,21 @@ export default function ToolsPage() {
             Links de ferramentas úteis (IA, gestão de projetos, marketing digital...) visíveis para os alunos.
           </p>
         </div>
-        <button
-          onClick={() => setShowForm((s) => !s)}
-          className="flex items-center gap-2 bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90"
-        >
-          <Plus size={16} /> Nova ferramenta
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={seedDefaults}
+            disabled={seeding}
+            className="flex items-center gap-2 bg-white border border-black/10 text-black/70 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-brand-light disabled:opacity-60"
+          >
+            <Sparkles size={16} /> {seeding ? 'A adicionar...' : 'Ferramentas padrão'}
+          </button>
+          <button
+            onClick={() => setShowForm((s) => !s)}
+            className="flex items-center gap-2 bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90"
+          >
+            <Plus size={16} /> Nova ferramenta
+          </button>
+        </div>
       </div>
 
       {showForm && (

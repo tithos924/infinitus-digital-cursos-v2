@@ -27,6 +27,13 @@ export class ToolsController {
 
   @UseGuards(RolesGuard)
   @Roles('ADMIN')
+  @Post('seed-defaults')
+  seedDefaults() {
+    return this.toolsService.seedDefaults();
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
   @Post()
   create(@Body() dto: CreateToolDto) {
     return this.toolsService.create(dto);
