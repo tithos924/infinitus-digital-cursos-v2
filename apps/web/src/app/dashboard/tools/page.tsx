@@ -1,9 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, ExternalLink, Sparkles, Wrench } from 'lucide-react';
+import { Plus, Trash2, ArrowRight, Sparkles, Wrench } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { ImageUploader } from '@/components/ImageUploader';
+import { categoryColor } from '@/lib/toolCategoryColors';
 
 type Tool = {
   id: string;
@@ -74,13 +75,6 @@ export default function ToolsPage() {
     }
   }
 
-  const grouped = tools.reduce<Record<string, Tool[]>>((acc, t) => {
-    const key = t.category || 'Geral';
-    acc[key] = acc[key] || [];
-    acc[key].push(t);
-    return acc;
-  }, {});
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -148,44 +142,48 @@ export default function ToolsPage() {
         </form>
       )}
 
-      {Object.entries(grouped).map(([cat, list]) => (
-        <div key={cat} className="space-y-3">
-          <p className="text-xs font-semibold text-black/40 uppercase">{cat}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {list.map((t) => (
-              <div key={t.id} className="bg-white rounded-xl2 border border-black/5 shadow-sm p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    {t.imageUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={t.imageUrl} alt={t.name} className="w-11 h-11 rounded-xl object-cover border border-black/5" />
-                    ) : (
-                      <div className="w-11 h-11 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
-                        <Wrench size={18} />
-                      </div>
-                    )}
-                    <h3 className="font-medium text-sm">{t.name}</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {tools.map((t) => {
+          const cat = t.category || 'Geral';
+          const color = categoryColor(cat);
+          return (
+            <div key={t.id} className="bg-white rounded-2xl border border-black/10 shadow-sm p-6 space-y-4">
+              <div className="flex items-start justify-between">
+                {t.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={t.imageUrl} alt={t.name} className="w-12 h-12 rounded-xl object-cover border border-black/5" />
+                ) : (
+                  <div className="w-12 h-12 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
+                    <Wrench size={20} />
                   </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <span className={`${color.bg} ${color.text} text-xs font-medium px-3 py-1 rounded-full`}>
+                    {cat}
+                  </span>
                   <Trash2
-                    size={14}
+                    size={16}
                     className="text-black/30 hover:text-red-500 cursor-pointer shrink-0"
                     onClick={() => deleteTool(t.id)}
                   />
                 </div>
-                {t.description && <p className="text-xs text-black/50">{t.description}</p>}
-                <a
-                  href={t.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-brand-orange font-medium"
-                >
-                  Abrir <ExternalLink size={12} />
-                </a>
               </div>
-            ))}
-          </div>
-        </div>
-      ))}
+              <div>
+                <h3 className="font-semibold">{t.name}</h3>
+                {t.description && <p className="text-sm text-black/50 mt-1">{t.description}</p>}
+              </div>
+              <a
+                href={t.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-sm text-brand-orange font-medium w-fit"
+              >
+                Abrir ferramenta <ArrowRight size={14} />
+              </a>
+            </div>
+          );
+        })}
+      </div>
 
       {tools.length === 0 && !showForm && (
         <p className="text-center text-black/40 text-sm py-12">

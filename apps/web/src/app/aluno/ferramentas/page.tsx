@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { ExternalLink, Wrench } from 'lucide-react';
+import { Wrench, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { categoryColor } from '@/lib/toolCategoryColors';
 
 type Tool = {
   id: string;
@@ -22,13 +23,6 @@ export default function AlunoToolsPage() {
     api('/tools', { token }).then(setTools).catch(() => {});
   }, [token]);
 
-  const grouped = tools.reduce<Record<string, Tool[]>>((acc, t) => {
-    const key = t.category || 'Geral';
-    acc[key] = acc[key] || [];
-    acc[key].push(t);
-    return acc;
-  }, {});
-
   return (
     <div className="space-y-6">
       <div>
@@ -36,38 +30,42 @@ export default function AlunoToolsPage() {
         <p className="text-sm text-black/50 mt-1">As melhores ferramentas para o teu negócio digital.</p>
       </div>
 
-      {Object.entries(grouped).map(([cat, list]) => (
-        <div key={cat} className="space-y-3">
-          <p className="text-xs font-semibold text-black/40 uppercase">{cat}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {list.map((t) => (
-              <a
-                key={t.id}
-                href={t.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white rounded-xl2 border border-black/5 shadow-sm p-5 space-y-3 hover:shadow-md transition-shadow block"
-              >
-                <div className="flex items-center gap-3">
-                  {t.imageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={t.imageUrl} alt={t.name} className="w-11 h-11 rounded-xl object-cover border border-black/5" />
-                  ) : (
-                    <div className="w-11 h-11 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
-                      <Wrench size={18} />
-                    </div>
-                  )}
-                  <h3 className="font-medium text-sm">{t.name}</h3>
-                </div>
-                {t.description && <p className="text-xs text-black/50">{t.description}</p>}
-                <span className="flex items-center gap-1 text-xs text-brand-orange font-medium">
-                  Abrir ferramenta <ExternalLink size={12} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {tools.map((t) => {
+          const cat = t.category || 'Geral';
+          const color = categoryColor(cat);
+          return (
+            <a
+              key={t.id}
+              href={t.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white rounded-2xl border border-black/10 shadow-sm p-6 space-y-4 hover:shadow-md hover:border-brand-orange/30 transition-all block"
+            >
+              <div className="flex items-start justify-between">
+                {t.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={t.imageUrl} alt={t.name} className="w-12 h-12 rounded-xl object-cover border border-black/5" />
+                ) : (
+                  <div className="w-12 h-12 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
+                    <Wrench size={20} />
+                  </div>
+                )}
+                <span className={`${color.bg} ${color.text} text-xs font-medium px-3 py-1 rounded-full`}>
+                  {cat}
                 </span>
-              </a>
-            ))}
-          </div>
-        </div>
-      ))}
+              </div>
+              <div>
+                <h3 className="font-semibold">{t.name}</h3>
+                {t.description && <p className="text-sm text-black/50 mt-1">{t.description}</p>}
+              </div>
+              <span className="flex items-center gap-1 text-sm text-brand-orange font-medium">
+                Abrir ferramenta <ArrowRight size={14} />
+              </span>
+            </a>
+          );
+        })}
+      </div>
 
       {tools.length === 0 && (
         <div className="text-center text-black/40 text-sm py-16 flex flex-col items-center gap-2">
