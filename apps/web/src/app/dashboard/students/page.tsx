@@ -38,7 +38,7 @@ export default function StudentsPage() {
     setError('');
     setSaving(true);
     try {
-      await api('/admin/students', {
+      const result = await api('/admin/students', {
         method: 'POST',
         token,
         body: JSON.stringify({ name, email, password, courseIds: selectedCourses }),
@@ -49,6 +49,11 @@ export default function StudentsPage() {
       setSelectedCourses([]);
       setShowForm(false);
       reload();
+      if (!result.emailSent) {
+        alert(
+          `Aluno criado, mas não foi possível enviar o email automaticamente. Envia-lhe manualmente o link e a palavra-passe.`,
+        );
+      }
     } catch (err: any) {
       setError(err.message || 'Erro ao criar aluno');
     } finally {
@@ -120,6 +125,9 @@ export default function StudentsPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
+          <p className="text-xs text-black/40 -mt-2">
+            O aluno vai receber automaticamente um email com o link da plataforma e esta palavra-passe.
+          </p>
 
           <div>
             <p className="text-xs font-medium text-black/50 mb-2">Dar acesso a estes cursos:</p>

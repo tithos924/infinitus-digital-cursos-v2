@@ -1,11 +1,15 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 
 @Injectable()
 export class AdminService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private mailService: MailService,
+  ) {}
 
   async listStudents() {
     return this.prisma.user.findMany({
@@ -44,7 +48,9 @@ export class AdminService {
       });
     }
 
-    return { id: student.id, name: student.name, email: student.email };
+    const mailResult = await this.mailService.sendStudentInvite(dto.email, dto.name, dto.password);
+
+    return { id: student.id, name: student.name, email: student.email, emailSent: mailResult.sent };
   }
 
   async grantAccess(studentId: string, courseId: string) {
