@@ -10,6 +10,7 @@ type Tool = {
   url: string;
   description?: string | null;
   category?: string | null;
+  imageUrl?: string | null;
 };
 
 export default function AlunoToolsPage() {
@@ -32,7 +33,7 @@ export default function AlunoToolsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">Ferramentas</h1>
-        <p className="text-sm text-black/50 mt-1">Recursos e ferramentas recomendadas pelo teu formador.</p>
+        <p className="text-sm text-black/50 mt-1">As melhores ferramentas para o teu negócio digital.</p>
       </div>
 
       {Object.entries(grouped).map(([cat, list]) => (
@@ -45,13 +46,23 @@ export default function AlunoToolsPage() {
                 href={t.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white rounded-xl2 border border-black/5 shadow-sm p-5 space-y-2 hover:shadow-md transition-shadow block"
+                className="bg-white rounded-xl2 border border-black/5 shadow-sm p-5 space-y-3 hover:shadow-md transition-shadow block"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {t.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={t.imageUrl} alt={t.name} className="w-11 h-11 rounded-xl object-cover border border-black/5" />
+                  ) : (
+                    <div className="w-11 h-11 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
+                      <Wrench size={18} />
+                    </div>
+                  )}
                   <h3 className="font-medium text-sm">{t.name}</h3>
-                  <ExternalLink size={14} className="text-brand-orange" />
                 </div>
                 {t.description && <p className="text-xs text-black/50">{t.description}</p>}
+                <span className="flex items-center gap-1 text-xs text-brand-orange font-medium">
+                  Abrir ferramenta <ExternalLink size={12} />
+                </span>
               </a>
             ))}
           </div>

@@ -19,6 +19,10 @@ export class UpdateToolDto {
   category?: string;
 
   @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
+  @IsOptional()
   @IsInt()
   order?: number;
 }

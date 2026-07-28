@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, IsUrl, MinLength } from 'class-validator';
+import { IsInt, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateToolDto {
   @IsString()
@@ -16,6 +16,10 @@ export class CreateToolDto {
   @IsOptional()
   @IsString()
   category?: string;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
 
   @IsOptional()
   @IsInt()

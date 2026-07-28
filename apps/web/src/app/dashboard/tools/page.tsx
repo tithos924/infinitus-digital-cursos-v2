@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, ExternalLink, Sparkles } from 'lucide-react';
+import { Plus, Trash2, ExternalLink, Sparkles, Wrench } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { ImageUploader } from '@/components/ImageUploader';
 
 type Tool = {
   id: string;
@@ -10,6 +11,7 @@ type Tool = {
   url: string;
   description?: string | null;
   category?: string | null;
+  imageUrl?: string | null;
 };
 
 export default function ToolsPage() {
@@ -20,6 +22,7 @@ export default function ToolsPage() {
   const [url, setUrl] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [saving, setSaving] = useState(false);
   const [seeding, setSeeding] = useState(false);
 
@@ -37,12 +40,13 @@ export default function ToolsPage() {
       await api('/tools', {
         method: 'POST',
         token,
-        body: JSON.stringify({ name, url, description, category: category || undefined }),
+        body: JSON.stringify({ name, url, description, category: category || undefined, imageUrl: imageUrl || undefined }),
       });
       setName('');
       setUrl('');
       setDescription('');
       setCategory('');
+      setImageUrl('');
       setShowForm(false);
       reload();
     } finally {
@@ -79,7 +83,7 @@ export default function ToolsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Ferramentas</h1>
           <p className="text-sm text-black/50 mt-1">
@@ -105,6 +109,7 @@ export default function ToolsPage() {
 
       {showForm && (
         <form onSubmit={createTool} className="bg-white rounded-xl2 border border-black/5 shadow-sm p-6 space-y-4">
+          <ImageUploader label="Ícone/logo da ferramenta" value={imageUrl} onChange={setImageUrl} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
               required
@@ -148,12 +153,22 @@ export default function ToolsPage() {
           <p className="text-xs font-semibold text-black/40 uppercase">{cat}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {list.map((t) => (
-              <div key={t.id} className="bg-white rounded-xl2 border border-black/5 shadow-sm p-5 space-y-2">
+              <div key={t.id} className="bg-white rounded-xl2 border border-black/5 shadow-sm p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-medium text-sm">{t.name}</h3>
+                  <div className="flex items-center gap-3">
+                    {t.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={t.imageUrl} alt={t.name} className="w-11 h-11 rounded-xl object-cover border border-black/5" />
+                    ) : (
+                      <div className="w-11 h-11 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
+                        <Wrench size={18} />
+                      </div>
+                    )}
+                    <h3 className="font-medium text-sm">{t.name}</h3>
+                  </div>
                   <Trash2
                     size={14}
-                    className="text-black/30 hover:text-red-500 cursor-pointer"
+                    className="text-black/30 hover:text-red-500 cursor-pointer shrink-0"
                     onClick={() => deleteTool(t.id)}
                   />
                 </div>
