@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import { BannerCarousel } from '@/components/BannerCarousel';
 
 export default function LandingPage() {
   return (
@@ -40,8 +39,9 @@ export default function LandingPage() {
               </Link>
             </div>
           </div>
-          <div className="max-w-3xl mx-auto text-left">
-            <BannerCarousel />
+          <div className="max-w-2xl mx-auto rounded-xl2 overflow-hidden border border-black/5 shadow-sm">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/banner.png" alt="Infinitus Digital" className="w-full h-auto" />
           </div>
         </div>
       </section>

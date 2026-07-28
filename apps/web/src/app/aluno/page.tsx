@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BookOpen, TrendingUp, Award } from 'lucide-react';
 import { StatCard } from '@/components/StatCard';
-import { BannerCarousel } from '@/components/BannerCarousel';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 
@@ -40,7 +39,10 @@ export default function AlunoHomePage() {
         <p className="text-sm text-black/50 mt-1">O teu resumo na plataforma</p>
       </div>
 
-      <BannerCarousel />
+      <div className="rounded-xl2 overflow-hidden border border-black/5 shadow-sm">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/banner.png" alt="Infinitus Digital" className="w-full h-auto" />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <StatCard label="Cursos ativos" value={enrollments.length} icon={BookOpen} />
