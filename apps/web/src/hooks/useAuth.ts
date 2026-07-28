@@ -9,6 +9,7 @@ export type AuthUser = {
   email: string;
   role: string;
   avatarUrl?: string | null;
+  bio?: string | null;
 };
 
 const TOKEN_KEY = 'infinitus_access_token';
@@ -56,5 +57,12 @@ export function useAuth() {
     router.push('/login');
   }, [router]);
 
-  return { user, token, loading, login, register, logout };
+  const refreshUser = useCallback(async () => {
+    if (!token) return;
+    const data = await api('/users/me', { token });
+    setUser(data);
+    return data;
+  }, [token]);
+
+  return { user, token, loading, login, register, logout, refreshUser };
 }
