@@ -28,7 +28,7 @@ export default function RegisterPage() {
   return (
     <main className="min-h-screen flex items-center justify-center px-4 relative">
       <div className="absolute top-6 right-6"><ThemeToggle /></div>
-      <div className="w-full max-w-sm bg-white dark:bg-neutral-900 rounded-xl2 shadow-sm border border-black/5 dark:border-white/10 p-8">
+      <div className="w-full max-w-sm bg-white dark:bg-neutral-900 rounded-xl2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-black/5 dark:border-white/10 p-8">
         <h1 className="text-2xl font-semibold text-center">Criar conta</h1>
         <p className="text-sm text-black/50 dark:text-white/50 text-center mt-1">Junta-te à Infinitus Digital Cursos</p>
 

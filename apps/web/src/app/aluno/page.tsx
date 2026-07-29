@@ -39,7 +39,7 @@ export default function AlunoHomePage() {
         <p className="text-sm text-black/50 dark:text-white/50 mt-1">O teu resumo na plataforma</p>
       </div>
 
-      <div className="rounded-xl2 overflow-hidden border border-black/5 dark:border-white/10 shadow-sm">
+      <div className="rounded-xl2 overflow-hidden border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/banner.png" alt="Infinitus Digital" className="w-full h-auto" />
       </div>
@@ -57,7 +57,7 @@ export default function AlunoHomePage() {
             <Link
               key={e.id}
               href={`/aluno/cursos/${e.course.id}`}
-              className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden hover:shadow-md transition-shadow"
             >
               <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold overflow-hidden">
                 {e.course.coverImageUrl ? (

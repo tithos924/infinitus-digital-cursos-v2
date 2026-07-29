@@ -111,7 +111,7 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
 
       <div className="space-y-3">
         {modules.map((m) => (
-          <div key={m.id} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm overflow-hidden">
+          <div key={m.id} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
             <button
               onClick={() => setOpenModule(openModule === m.id ? null : m.id)}
               className="w-full flex items-center justify-between px-5 py-4 text-left"

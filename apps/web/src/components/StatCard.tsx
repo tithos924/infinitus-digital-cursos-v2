@@ -10,7 +10,7 @@ export function StatCard({
   icon: LucideIcon;
 }) {
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl2 p-6 shadow-sm border border-black/5 dark:border-white/10 flex items-center justify-between">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl2 p-6 shadow-sm hover:shadow-md transition-shadow duration-200 border border-black/5 dark:border-white/10 flex items-center justify-between">
       <div>
         <p className="text-sm text-black/50 dark:text-white/50">{label}</p>
         <p className="text-2xl font-semibold mt-1">{value}</p>

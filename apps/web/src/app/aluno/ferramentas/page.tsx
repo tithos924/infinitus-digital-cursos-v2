@@ -40,7 +40,7 @@ export default function AlunoToolsPage() {
               href={t.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white dark:bg-neutral-900 rounded-2xl border border-black/10 dark:border-white/10 shadow-sm p-6 space-y-4 hover:shadow-md hover:border-brand-orange/30 transition-all block"
+              className="bg-white dark:bg-neutral-900 rounded-2xl border border-black/10 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-6 space-y-4 hover:shadow-md hover:border-brand-orange/30 transition-all block"
             >
               <div className="flex items-start justify-between">
                 {t.imageUrl ? (

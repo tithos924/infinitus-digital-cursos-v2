@@ -36,7 +36,7 @@ export default function AlunoMeusCursosPage() {
           <Link
             key={e.id}
             href={`/aluno/cursos/${e.course.id}`}
-            className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden hover:shadow-md transition-shadow"
           >
             <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold overflow-hidden">
               {e.course.coverImageUrl ? (

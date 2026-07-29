@@ -15,3 +15,16 @@ body {
 ::selection {
   @apply bg-brand-orange/20;
 }
+
+button, a, input, textarea {
+  transition: all 0.15s ease;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+a[class*="rounded-full"]:active,
+button[class*="rounded-full"]:active {
+  transform: scale(0.96);
+}

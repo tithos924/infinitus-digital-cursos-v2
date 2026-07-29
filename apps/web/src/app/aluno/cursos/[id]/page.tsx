@@ -72,13 +72,13 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
               Sem vídeo nesta aula
             </div>
           )}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-5">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-5">
             <h2 className="font-medium mb-2">{activeLesson?.title ?? 'Seleciona uma aula'}</h2>
             <p className="text-sm text-black/60 dark:text-white/60 whitespace-pre-wrap">{activeLesson?.contentHtml}</p>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-3 space-y-3 h-fit">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-3 space-y-3 h-fit">
           {course?.modules.map((m) => (
             <div key={m.id}>
               <p className="text-xs font-semibold text-black/40 dark:text-white/40 uppercase px-2 py-1">{m.title}</p>

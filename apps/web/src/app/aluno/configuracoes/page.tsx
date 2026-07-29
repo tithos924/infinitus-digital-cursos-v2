@@ -64,7 +64,7 @@ export default function Page() {
     <div className="space-y-4 max-w-md">
       <h1 className="text-2xl font-semibold">Configurações</h1>
 
-      <form onSubmit={saveProfile} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-6 space-y-4">
+      <form onSubmit={saveProfile} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-6 space-y-4">
         <p className="text-sm font-medium">O teu perfil</p>
         <ImageUploader label="Foto de perfil" value={avatarUrl} onChange={setAvatarUrl} />
         <div>
@@ -91,7 +91,7 @@ export default function Page() {
         </div>
         <button
           disabled={savingProfile}
-          className="bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 disabled:opacity-60"
+          className="bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 active:scale-95 transition-transform disabled:opacity-60"
         >
           {savingProfile ? 'A guardar...' : 'Guardar perfil'}
         </button>
@@ -106,7 +106,7 @@ export default function Page() {
       </button>
 
       {user?.role !== 'ADMIN' && !adminExists && (
-        <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-6 space-y-3">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-6 space-y-3">
           <p className="text-sm font-medium">Tornar-me Administrador</p>
           <p className="text-xs text-black/50 dark:text-white/50">
             Usa isto uma única vez para ativares a tua conta como administrador da plataforma.
@@ -114,7 +114,7 @@ export default function Page() {
           <button
             onClick={promote}
             disabled={loading}
-            className="bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 disabled:opacity-60"
+            className="bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 active:scale-95 transition-transform disabled:opacity-60"
           >
             {loading ? 'A processar...' : 'Tornar-me Administrador'}
           </button>

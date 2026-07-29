@@ -15,7 +15,7 @@ export default function LandingPage() {
           <ThemeToggle />
           <Link
             href="/login"
-            className="text-sm font-medium bg-brand-black text-white px-5 py-2.5 rounded-full hover:bg-brand-orange transition-colors"
+            className="text-sm font-medium bg-brand-black text-white px-5 py-2.5 rounded-full hover:bg-brand-orange active:scale-95 transition-transform transition-colors"
           >
             Entrar
           </Link>
@@ -35,13 +35,13 @@ export default function LandingPage() {
             <div className="mt-10 flex items-center justify-center gap-4">
               <Link
                 href="/login"
-                className="bg-brand-orange text-white px-8 py-3.5 rounded-full font-medium hover:opacity-90 transition-opacity"
+                className="bg-brand-orange text-white px-8 py-3.5 rounded-full font-medium hover:opacity-90 active:scale-95 transition-transform transition-opacity"
               >
                 Entrar na plataforma
               </Link>
             </div>
           </div>
-          <div className="max-w-2xl mx-auto rounded-xl2 overflow-hidden border border-black/5 dark:border-white/10 shadow-sm">
+          <div className="max-w-2xl mx-auto rounded-xl2 overflow-hidden border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/banner.png" alt="Infinitus Digital" className="w-full h-auto" />
           </div>

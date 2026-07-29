@@ -72,14 +72,14 @@ export default function CoursesPage() {
         </div>
         <button
           onClick={() => setShowForm((s) => !s)}
-          className="flex items-center gap-2 bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90"
+          className="flex items-center gap-2 bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 active:scale-95 transition-transform"
         >
           <Plus size={16} /> Novo curso
         </button>
       </div>
 
       {showForm && (
-        <form onSubmit={createCourse} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-6 space-y-4">
+        <form onSubmit={createCourse} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-6 space-y-4">
           <input
             required
             placeholder="Título do curso"
@@ -104,7 +104,7 @@ export default function CoursesPage() {
           />
           <button
             disabled={saving}
-            className="bg-brand-black text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-brand-orange transition-colors disabled:opacity-60"
+            className="bg-brand-black text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-brand-orange active:scale-95 transition-transform transition-colors disabled:opacity-60"
           >
             {saving ? 'A guardar...' : 'Criar curso'}
           </button>
@@ -113,7 +113,7 @@ export default function CoursesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {courses.map((c) => (
-          <div key={c.id} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm overflow-hidden">
+          <div key={c.id} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
             <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold overflow-hidden relative">
               {c.coverImageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element

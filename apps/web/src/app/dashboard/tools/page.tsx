@@ -94,7 +94,7 @@ export default function ToolsPage() {
           </button>
           <button
             onClick={() => setShowForm((s) => !s)}
-            className="flex items-center gap-2 bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90"
+            className="flex items-center gap-2 bg-brand-orange text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 active:scale-95 transition-transform"
           >
             <Plus size={16} /> Nova ferramenta
           </button>
@@ -102,7 +102,7 @@ export default function ToolsPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={createTool} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-6 space-y-4">
+        <form onSubmit={createTool} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-6 space-y-4">
           <ImageUploader label="Ícone/logo da ferramenta" value={imageUrl} onChange={setImageUrl} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
@@ -135,7 +135,7 @@ export default function ToolsPage() {
           />
           <button
             disabled={saving}
-            className="bg-brand-black text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-brand-orange transition-colors disabled:opacity-60"
+            className="bg-brand-black text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-brand-orange active:scale-95 transition-transform transition-colors disabled:opacity-60"
           >
             {saving ? 'A guardar...' : 'Adicionar ferramenta'}
           </button>
@@ -147,7 +147,7 @@ export default function ToolsPage() {
           const cat = t.category || 'Geral';
           const color = categoryColor(cat);
           return (
-            <div key={t.id} className="bg-white dark:bg-neutral-900 rounded-2xl border border-black/10 dark:border-white/10 shadow-sm p-6 space-y-4">
+            <div key={t.id} className="bg-white dark:bg-neutral-900 rounded-2xl border border-black/10 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-6 space-y-4">
               <div className="flex items-start justify-between">
                 {t.imageUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element

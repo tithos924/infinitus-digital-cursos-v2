@@ -33,7 +33,7 @@ export default function DashboardPage() {
         <StatCard label="Receita" value={stats ? `${stats.revenue.toLocaleString('pt-AO')} Kz` : '—'} icon={Wallet} />
       </div>
 
-      <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
         <div className="px-6 py-4 border-b border-black/5 dark:border-white/10">
           <h2 className="font-medium">Últimos cursos</h2>
         </div>
