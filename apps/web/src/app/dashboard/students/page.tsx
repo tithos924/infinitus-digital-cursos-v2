@@ -86,7 +86,7 @@ export default function StudentsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Alunos</h1>
-          <p className="text-sm text-black/50 mt-1">
+          <p className="text-sm text-black/50 dark:text-white/50 mt-1">
             Cria contas de alunos e dá acesso aos cursos. Os alunos não se registam sozinhos.
           </p>
         </div>
@@ -99,14 +99,14 @@ export default function StudentsPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={createStudent} className="bg-white rounded-xl2 border border-black/5 shadow-sm p-6 space-y-4">
+        <form onSubmit={createStudent} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
               required
               placeholder="Nome do aluno"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+              className="bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
             />
             <input
               required
@@ -114,7 +114,7 @@ export default function StudentsPage() {
               placeholder="Email do aluno"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+              className="bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
             />
           </div>
           <input
@@ -123,19 +123,19 @@ export default function StudentsPage() {
             placeholder="Palavra-passe de acesso (dá-a ao aluno)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="w-full bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
-          <p className="text-xs text-black/40 -mt-2">
+          <p className="text-xs text-black/40 dark:text-white/40 -mt-2">
             O aluno vai receber automaticamente um email com o link da plataforma e esta palavra-passe.
           </p>
 
           <div>
-            <p className="text-xs font-medium text-black/50 mb-2">Dar acesso a estes cursos:</p>
+            <p className="text-xs font-medium text-black/50 dark:text-white/50 mb-2">Dar acesso a estes cursos:</p>
             <div className="flex flex-wrap gap-2">
               {courses.map((c) => (
                 <label
                   key={c.id}
-                  className="flex items-center gap-2 bg-brand-light px-3 py-2 rounded-lg text-sm cursor-pointer"
+                  className="flex items-center gap-2 bg-brand-light dark:bg-white/5 px-3 py-2 rounded-lg text-sm cursor-pointer"
                 >
                   <input
                     type="checkbox"
@@ -149,7 +149,7 @@ export default function StudentsPage() {
                   {c.title}
                 </label>
               ))}
-              {courses.length === 0 && <p className="text-xs text-black/40">Cria um curso primeiro.</p>}
+              {courses.length === 0 && <p className="text-xs text-black/40 dark:text-white/40">Cria um curso primeiro.</p>}
             </div>
           </div>
 
@@ -163,13 +163,13 @@ export default function StudentsPage() {
         </form>
       )}
 
-      <div className="bg-white rounded-xl2 border border-black/5 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm overflow-hidden">
         {students.map((s) => (
-          <div key={s.id} className="px-6 py-4 border-b border-black/5 last:border-0 space-y-2">
+          <div key={s.id} className="px-6 py-4 border-b border-black/5 dark:border-white/10 last:border-0 space-y-2">
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-sm">{s.name}</p>
-                <p className="text-xs text-black/40">{s.email}</p>
+                <p className="text-xs text-black/40 dark:text-white/40">{s.email}</p>
               </div>
               <Trash2
                 size={16}
@@ -187,7 +187,7 @@ export default function StudentsPage() {
                     className={
                       hasAccess
                         ? 'flex items-center gap-1 bg-brand-orange/10 text-brand-orange px-3 py-1.5 rounded-full text-xs font-medium'
-                        : 'flex items-center gap-1 bg-brand-light text-black/40 px-3 py-1.5 rounded-full text-xs font-medium hover:bg-black/5'
+                        : 'flex items-center gap-1 bg-brand-light dark:bg-white/5 text-black/40 dark:text-white/40 px-3 py-1.5 rounded-full text-xs font-medium hover:bg-black/5'
                     }
                   >
                     <BookOpen size={12} /> {c.title}
@@ -198,7 +198,7 @@ export default function StudentsPage() {
           </div>
         ))}
         {students.length === 0 && (
-          <p className="text-center text-black/40 text-sm py-10">Ainda sem alunos criados.</p>
+          <p className="text-center text-black/40 dark:text-white/40 text-sm py-10">Ainda sem alunos criados.</p>
         )}
       </div>
     </div>

@@ -64,29 +64,29 @@ export default function Page() {
     <div className="space-y-4 max-w-md">
       <h1 className="text-2xl font-semibold">Configurações</h1>
 
-      <form onSubmit={saveProfile} className="bg-white rounded-xl2 border border-black/5 shadow-sm p-6 space-y-4">
+      <form onSubmit={saveProfile} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-6 space-y-4">
         <p className="text-sm font-medium">O teu perfil</p>
         <ImageUploader label="Foto de perfil" value={avatarUrl} onChange={setAvatarUrl} />
         <div>
-          <label className="text-xs text-black/40">Nome</label>
+          <label className="text-xs text-black/40 dark:text-white/40">Nome</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40 mt-1"
+            className="w-full bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40 mt-1"
           />
         </div>
         <div>
-          <label className="text-xs text-black/40">Email</label>
+          <label className="text-xs text-black/40 dark:text-white/40">Email</label>
           <p className="text-sm font-medium py-3">{user?.email}</p>
         </div>
         <div>
-          <label className="text-xs text-black/40">Biografia</label>
+          <label className="text-xs text-black/40 dark:text-white/40">Biografia</label>
           <textarea
             rows={3}
             placeholder="Fala um pouco sobre ti..."
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40 mt-1"
+            className="w-full bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40 mt-1"
           />
         </div>
         <button
@@ -95,20 +95,20 @@ export default function Page() {
         >
           {savingProfile ? 'A guardar...' : 'Guardar perfil'}
         </button>
-        {profileMessage && <p className="text-xs text-black/60">{profileMessage}</p>}
+        {profileMessage && <p className="text-xs text-black/60 dark:text-white/60">{profileMessage}</p>}
       </form>
 
       <button
         onClick={logout}
-        className="flex items-center gap-2 bg-white border border-black/10 text-black/70 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-brand-light transition-colors"
+        className="flex items-center gap-2 bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 text-black/70 dark:text-white/70 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-brand-light dark:hover:bg-white/10 dark:bg-white/5 transition-colors"
       >
         <LogOut size={16} /> Sair da conta
       </button>
 
       {user?.role !== 'ADMIN' && !adminExists && (
-        <div className="bg-white rounded-xl2 border border-black/5 shadow-sm p-6 space-y-3">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-6 space-y-3">
           <p className="text-sm font-medium">Tornar-me Administrador</p>
-          <p className="text-xs text-black/50">
+          <p className="text-xs text-black/50 dark:text-white/50">
             Usa isto uma única vez para ativares a tua conta como administrador da plataforma.
           </p>
           <button
@@ -118,7 +118,7 @@ export default function Page() {
           >
             {loading ? 'A processar...' : 'Tornar-me Administrador'}
           </button>
-          {message && <p className="text-xs text-black/60">{message}</p>}
+          {message && <p className="text-xs text-black/60 dark:text-white/60">{message}</p>}
         </div>
       )}
     </div>

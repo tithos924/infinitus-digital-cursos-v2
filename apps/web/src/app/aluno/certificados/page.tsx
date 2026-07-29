@@ -2,8 +2,8 @@ export default function Page() {
   return (
     <div className="space-y-2">
       <h1 className="text-2xl font-semibold">Certificados</h1>
-      <p className="text-sm text-black/50">Os teus certificados de conclusão.</p>
-      <div className="bg-white rounded-xl2 border border-black/5 shadow-sm p-10 text-center text-black/40 mt-6">
+      <p className="text-sm text-black/50 dark:text-white/50">Os teus certificados de conclusão.</p>
+      <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-10 text-center text-black/40 dark:text-white/40 mt-6">
         Ainda sem certificados emitidos.
       </div>
     </div>

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -23,14 +24,15 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-sm bg-white rounded-xl2 shadow-sm border border-black/5 p-8">
+    <main className="min-h-screen flex items-center justify-center px-4 relative">
+      <div className="absolute top-6 right-6"><ThemeToggle /></div>
+      <div className="w-full max-w-sm bg-white dark:bg-neutral-900 rounded-xl2 shadow-sm border border-black/5 dark:border-white/10 p-8">
         <div className="flex justify-center mb-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.png" alt="Infinitus Digital Cursos" className="h-14 w-14 object-contain" />
         </div>
         <h1 className="text-2xl font-semibold text-center">Entrar</h1>
-        <p className="text-sm text-black/50 text-center mt-1">Acede à tua conta Infinitus</p>
+        <p className="text-sm text-black/50 dark:text-white/50 text-center mt-1">Acede à tua conta Infinitus</p>
 
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
           <input
@@ -39,7 +41,7 @@ export default function LoginPage() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="w-full bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <input
             type="password"
@@ -47,7 +49,7 @@ export default function LoginPage() {
             placeholder="Palavra-passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="w-full bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           {error && <p className="text-sm text-red-500">{error}</p>}
           <button
@@ -58,7 +60,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-sm text-center text-black/50 mt-6">
+        <p className="text-sm text-center text-black/50 dark:text-white/50 mt-6">
           Sem acesso ainda? Fala com o administrador da plataforma.
         </p>
       </div>

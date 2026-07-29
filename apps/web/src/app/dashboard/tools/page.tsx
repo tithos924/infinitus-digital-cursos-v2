@@ -80,7 +80,7 @@ export default function ToolsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Ferramentas</h1>
-          <p className="text-sm text-black/50 mt-1">
+          <p className="text-sm text-black/50 dark:text-white/50 mt-1">
             Links de ferramentas úteis (IA, gestão de projetos, marketing digital...) visíveis para os alunos.
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function ToolsPage() {
           <button
             onClick={seedDefaults}
             disabled={seeding}
-            className="flex items-center gap-2 bg-white border border-black/10 text-black/70 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-brand-light disabled:opacity-60"
+            className="flex items-center gap-2 bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 text-black/70 dark:text-white/70 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-brand-light dark:hover:bg-white/10 dark:bg-white/5 disabled:opacity-60"
           >
             <Sparkles size={16} /> {seeding ? 'A adicionar...' : 'Ferramentas padrão'}
           </button>
@@ -102,7 +102,7 @@ export default function ToolsPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={createTool} className="bg-white rounded-xl2 border border-black/5 shadow-sm p-6 space-y-4">
+        <form onSubmit={createTool} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-6 space-y-4">
           <ImageUploader label="Ícone/logo da ferramenta" value={imageUrl} onChange={setImageUrl} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
@@ -110,28 +110,28 @@ export default function ToolsPage() {
               placeholder="Nome (ex: ChatGPT, Trello, Canva)"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+              className="bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
             />
             <input
               required
               placeholder="URL (ex: https://trello.com)"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              className="bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+              className="bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
             />
           </div>
           <input
             placeholder="Categoria (ex: Inteligência Artificial, Gestão de Projetos, Design)"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="w-full bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <textarea
             placeholder="Descrição curta (opcional)"
             rows={2}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full bg-brand-light rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="w-full bg-brand-light dark:bg-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <button
             disabled={saving}
@@ -147,11 +147,11 @@ export default function ToolsPage() {
           const cat = t.category || 'Geral';
           const color = categoryColor(cat);
           return (
-            <div key={t.id} className="bg-white rounded-2xl border border-black/10 shadow-sm p-6 space-y-4">
+            <div key={t.id} className="bg-white dark:bg-neutral-900 rounded-2xl border border-black/10 dark:border-white/10 shadow-sm p-6 space-y-4">
               <div className="flex items-start justify-between">
                 {t.imageUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={t.imageUrl} alt={t.name} className="w-12 h-12 rounded-xl object-cover border border-black/5" />
+                  <img src={t.imageUrl} alt={t.name} className="w-12 h-12 rounded-xl object-cover border border-black/5 dark:border-white/10" />
                 ) : (
                   <div className="w-12 h-12 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
                     <Wrench size={20} />
@@ -170,7 +170,7 @@ export default function ToolsPage() {
               </div>
               <div>
                 <h3 className="font-semibold">{t.name}</h3>
-                {t.description && <p className="text-sm text-black/50 mt-1">{t.description}</p>}
+                {t.description && <p className="text-sm text-black/50 dark:text-white/50 mt-1">{t.description}</p>}
               </div>
               <a
                 href={t.url}
@@ -186,7 +186,7 @@ export default function ToolsPage() {
       </div>
 
       {tools.length === 0 && !showForm && (
-        <p className="text-center text-black/40 text-sm py-12">
+        <p className="text-center text-black/40 dark:text-white/40 text-sm py-12">
           Ainda sem ferramentas adicionadas.
         </p>
       )}

@@ -54,9 +54,9 @@ export function ImageUploader({
 
   return (
     <div className="space-y-2">
-      {label && <p className="text-xs font-medium text-black/50">{label}</p>}
+      {label && <p className="text-xs font-medium text-black/50 dark:text-white/50">{label}</p>}
       {value ? (
-        <div className="relative w-24 h-24 rounded-xl overflow-hidden border border-black/10">
+        <div className="relative w-24 h-24 rounded-xl overflow-hidden border border-black/10 dark:border-white/10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={value} alt="Pré-visualização" className="w-full h-full object-cover" />
           <button
@@ -72,7 +72,7 @@ export function ImageUploader({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="w-24 h-24 rounded-xl border-2 border-dashed border-black/15 flex flex-col items-center justify-center gap-1 text-black/40 hover:border-brand-orange hover:text-brand-orange transition-colors disabled:opacity-60"
+          className="w-24 h-24 rounded-xl border-2 border-dashed border-black/15 flex flex-col items-center justify-center gap-1 text-black/40 dark:text-white/40 hover:border-brand-orange hover:text-brand-orange transition-colors disabled:opacity-60"
         >
           {uploading ? <Loader2 size={20} className="animate-spin" /> : <Upload size={20} />}
           <span className="text-[10px]">{uploading ? 'A carregar...' : 'Carregar'}</span>

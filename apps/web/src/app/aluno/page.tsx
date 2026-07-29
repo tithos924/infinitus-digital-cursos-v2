@@ -36,10 +36,10 @@ export default function AlunoHomePage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">Olá, {user?.name?.split(' ')[0]}</h1>
-        <p className="text-sm text-black/50 mt-1">O teu resumo na plataforma</p>
+        <p className="text-sm text-black/50 dark:text-white/50 mt-1">O teu resumo na plataforma</p>
       </div>
 
-      <div className="rounded-xl2 overflow-hidden border border-black/5 shadow-sm">
+      <div className="rounded-xl2 overflow-hidden border border-black/5 dark:border-white/10 shadow-sm">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/banner.png" alt="Infinitus Digital" className="w-full h-auto" />
       </div>
@@ -57,7 +57,7 @@ export default function AlunoHomePage() {
             <Link
               key={e.id}
               href={`/aluno/cursos/${e.course.id}`}
-              className="bg-white rounded-xl2 border border-black/5 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
             >
               <div className="h-32 bg-brand-orange/10 flex items-center justify-center text-brand-orange text-3xl font-semibold overflow-hidden">
                 {e.course.coverImageUrl ? (
@@ -69,17 +69,17 @@ export default function AlunoHomePage() {
               </div>
               <div className="p-5 space-y-2">
                 <h3 className="font-medium">{e.course.title}</h3>
-                <div className="w-full bg-brand-light rounded-full h-1.5">
+                <div className="w-full bg-brand-light dark:bg-white/5 rounded-full h-1.5">
                   <div className="bg-brand-orange h-1.5 rounded-full" style={{ width: `${e.progressPct}%` }} />
                 </div>
-                <p className="text-xs text-black/40">{e.progressPct}% concluído</p>
+                <p className="text-xs text-black/40 dark:text-white/40">{e.progressPct}% concluído</p>
               </div>
             </Link>
           ))}
         </div>
 
         {enrollments.length === 0 && (
-          <p className="text-center text-black/40 text-sm py-16">
+          <p className="text-center text-black/40 dark:text-white/40 text-sm py-16">
             Ainda não tens acesso a nenhum curso. Fala com o administrador da plataforma.
           </p>
         )}

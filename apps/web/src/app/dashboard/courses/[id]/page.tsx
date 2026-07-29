@@ -80,13 +80,13 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">{course?.title ?? 'A carregar...'}</h1>
-          <p className="text-sm text-black/50 mt-1">{course?.description || 'Sem descrição'}</p>
+          <p className="text-sm text-black/50 dark:text-white/50 mt-1">{course?.description || 'Sem descrição'}</p>
         </div>
         <button
           onClick={publish}
           className={
             course?.status === 'PUBLISHED'
-              ? 'px-5 py-2.5 rounded-full text-sm font-medium border border-black/10 hover:bg-brand-light'
+              ? 'px-5 py-2.5 rounded-full text-sm font-medium border border-black/10 dark:border-white/10 hover:bg-brand-light dark:hover:bg-white/10 dark:bg-white/5'
               : 'px-5 py-2.5 rounded-full text-sm font-medium bg-brand-orange text-white hover:opacity-90'
           }
         >
@@ -100,7 +100,7 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
             placeholder="Título do novo módulo (ex: Módulo 1 — Introdução)"
             value={newModuleTitle}
             onChange={(e) => setNewModuleTitle(e.target.value)}
-            className="flex-1 bg-white border border-black/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="flex-1 bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <button className="flex items-center gap-1 bg-brand-black text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-brand-orange transition-colors">
             <Plus size={16} /> Módulo
@@ -111,7 +111,7 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
 
       <div className="space-y-3">
         {modules.map((m) => (
-          <div key={m.id} className="bg-white rounded-xl2 border border-black/5 shadow-sm overflow-hidden">
+          <div key={m.id} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm overflow-hidden">
             <button
               onClick={() => setOpenModule(openModule === m.id ? null : m.id)}
               className="w-full flex items-center justify-between px-5 py-4 text-left"
@@ -123,7 +123,7 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
                   <img src={m.imageUrl} alt={m.title} className="w-8 h-8 rounded-md object-cover" />
                 )}
                 {m.title}
-                <span className="text-xs text-black/40 font-normal">({m.lessons.length} aulas)</span>
+                <span className="text-xs text-black/40 dark:text-white/40 font-normal">({m.lessons.length} aulas)</span>
               </span>
               <span className="flex items-center gap-3">
                 <Trash2
@@ -138,14 +138,14 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
               </span>
             </button>
             {openModule === m.id && (
-              <div className="border-t border-black/5 px-5 py-4">
+              <div className="border-t border-black/5 dark:border-white/10 px-5 py-4">
                 <LessonList moduleId={m.id} lessons={m.lessons} token={token} onChange={reload} />
               </div>
             )}
           </div>
         ))}
         {modules.length === 0 && (
-          <p className="text-center text-black/40 py-10 text-sm">
+          <p className="text-center text-black/40 dark:text-white/40 py-10 text-sm">
             Ainda sem módulos. Cria o primeiro acima.
           </p>
         )}
@@ -202,7 +202,7 @@ function LessonList({
   return (
     <div className="space-y-3">
       {lessons.map((l) => (
-        <div key={l.id} className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-brand-light">
+        <div key={l.id} className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-brand-light dark:bg-white/5">
           <span className="flex items-center gap-2 text-sm">
             {l.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -210,7 +210,7 @@ function LessonList({
             ) : l.videoUrl ? (
               <Video size={15} className="text-brand-orange" />
             ) : (
-              <FileText size={15} className="text-black/40" />
+              <FileText size={15} className="text-black/40 dark:text-white/40" />
             )}
             {l.title}
           </span>
@@ -225,13 +225,13 @@ function LessonList({
             placeholder="Título da aula"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="w-full bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <input
             placeholder="URL do vídeo (YouTube, Vimeo, Bunny.net...)"
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
-            className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="w-full bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <ImageUploader label="Miniatura da aula (opcional)" value={imageUrl} onChange={setImageUrl} />
           <textarea
@@ -239,7 +239,7 @@ function LessonList({
             rows={2}
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+            className="w-full bg-white dark:bg-neutral-900 border border-black/10 dark:border-white/10 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
           />
           <div className="flex gap-2">
             <button
@@ -251,7 +251,7 @@ function LessonList({
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 rounded-lg text-xs font-medium border border-black/10 hover:bg-white"
+              className="px-4 py-2 rounded-lg text-xs font-medium border border-black/10 dark:border-white/10 hover:bg-white dark:bg-neutral-900"
             >
               Cancelar
             </button>

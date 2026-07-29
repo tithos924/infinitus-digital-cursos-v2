@@ -16,11 +16,11 @@ export default function AlunoLayout({ children }: { children: React.ReactNode })
   }, [loading, user, router]);
 
   if (loading || !user) {
-    return <div className="min-h-screen flex items-center justify-center text-black/40">A carregar...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-black/40 dark:text-white/40">A carregar...</div>;
   }
 
   return (
-    <div className="flex min-h-screen bg-brand-light">
+    <div className="flex min-h-screen bg-brand-light dark:bg-white/5">
       <AlunoSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 min-w-0">
         <Topbar onMenuClick={() => setSidebarOpen(true)} />

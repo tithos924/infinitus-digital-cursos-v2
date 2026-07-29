@@ -51,7 +51,7 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
 
   return (
     <div className="space-y-4">
-      <Link href="/aluno" className="flex items-center gap-1 text-sm text-black/50 hover:text-black w-fit">
+      <Link href="/aluno" className="flex items-center gap-1 text-sm text-black/50 dark:text-white/50 hover:text-black w-fit">
         <ChevronLeft size={16} /> Voltar aos meus cursos
       </Link>
       <h1 className="text-2xl font-semibold">{course?.title ?? 'A carregar...'}</h1>
@@ -68,27 +68,27 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
               />
             </div>
           ) : (
-            <div className="aspect-video bg-brand-light rounded-xl2 flex items-center justify-center text-black/30 text-sm">
+            <div className="aspect-video bg-brand-light dark:bg-white/5 rounded-xl2 flex items-center justify-center text-black/30 text-sm">
               Sem vídeo nesta aula
             </div>
           )}
-          <div className="bg-white rounded-xl2 border border-black/5 shadow-sm p-5">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-5">
             <h2 className="font-medium mb-2">{activeLesson?.title ?? 'Seleciona uma aula'}</h2>
-            <p className="text-sm text-black/60 whitespace-pre-wrap">{activeLesson?.contentHtml}</p>
+            <p className="text-sm text-black/60 dark:text-white/60 whitespace-pre-wrap">{activeLesson?.contentHtml}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl2 border border-black/5 shadow-sm p-3 space-y-3 h-fit">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm p-3 space-y-3 h-fit">
           {course?.modules.map((m) => (
             <div key={m.id}>
-              <p className="text-xs font-semibold text-black/40 uppercase px-2 py-1">{m.title}</p>
+              <p className="text-xs font-semibold text-black/40 dark:text-white/40 uppercase px-2 py-1">{m.title}</p>
               {m.lessons.map((l) => (
                 <button
                   key={l.id}
                   onClick={() => setActiveLesson(l)}
                   className={clsx(
                     'w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-lg text-sm transition-colors',
-                    activeLesson?.id === l.id ? 'bg-brand-orange/10 text-brand-orange' : 'hover:bg-brand-light',
+                    activeLesson?.id === l.id ? 'bg-brand-orange/10 text-brand-orange' : 'hover:bg-brand-light dark:hover:bg-white/10 dark:bg-white/5',
                   )}
                 >
                   {l.videoUrl ? <PlayCircle size={16} /> : <FileText size={16} />}
