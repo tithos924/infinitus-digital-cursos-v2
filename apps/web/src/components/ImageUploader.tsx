@@ -42,7 +42,9 @@ export function ImageUploader({
       if (data.secure_url) {
         onChange(data.secure_url);
       } else {
-        setError(data.error?.message || 'Falha ao carregar a imagem.');
+        setError(
+          `${data.error?.message || 'Falha ao carregar a imagem.'} (cloud: ${CLOUD_NAME || 'vazio'}, preset: ${UPLOAD_PRESET || 'vazio'})`,
+        );
       }
     } catch {
       setError('Falha ao carregar a imagem (erro de rede).');
