@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UsersService } from './users.service';
@@ -12,6 +12,11 @@ export class UsersController {
   @Get('me')
   me(@CurrentUser() user: any) {
     return this.usersService.me(user.sub);
+  }
+
+  @Get(':id/public-profile')
+  publicProfile(@Param('id') id: string) {
+    return this.usersService.publicProfile(id);
   }
 
   @Patch('me')

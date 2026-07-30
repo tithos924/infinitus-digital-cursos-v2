@@ -44,6 +44,15 @@ model User {
   sales         Sale[]
   comments      Comment[]
   reviews       Review[]
+  chatMessages  ChatMessage[]
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 model RefreshToken {

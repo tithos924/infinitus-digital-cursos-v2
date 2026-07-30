@@ -10,6 +10,7 @@ import { AdminModule } from './admin/admin.module';
 import { MailModule } from './mail/mail.module';
 import { ToolsModule } from './tools/tools.module';
 import { BannersModule } from './banners/banners.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { BannersModule } from './banners/banners.module';
     MailModule,
     ToolsModule,
     BannersModule,
+    ChatModule,
   ],
 })
 export class AppModule {}
