@@ -24,13 +24,11 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 relative">
+    <main className="min-h-screen flex flex-col items-center justify-center px-4 relative gap-6">
       <div className="absolute top-6 right-6"><ThemeToggle /></div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/wordmark.png" alt="Infinitus Digital Cursos" className="h-16 w-auto object-contain" />
       <div className="w-full max-w-sm bg-white dark:bg-neutral-900 rounded-xl2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-black/5 dark:border-white/10 p-8">
-        <div className="flex justify-center mb-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/wordmark.png" alt="Infinitus Digital Cursos" className="h-12 w-auto object-contain" />
-        </div>
         <h1 className="text-2xl font-semibold text-center">Entrar</h1>
         <p className="text-sm text-black/50 dark:text-white/50 text-center mt-1">Acede à tua conta Infinitus</p>
 
