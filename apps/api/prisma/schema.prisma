@@ -49,7 +49,8 @@ model User {
 
 model ChatMessage {
   id        String   @id @default(uuid())
-  content   String
+  content   String?
+  audioUrl  String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())

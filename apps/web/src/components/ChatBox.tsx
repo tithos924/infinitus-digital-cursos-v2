@@ -1,13 +1,17 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Send } from 'lucide-react';
+import { Send, Mic, Square, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { ProfileModal } from './ProfileModal';
 
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
 type Message = {
   id: string;
-  content: string;
+  content?: string | null;
+  audioUrl?: string | null;
   createdAt: string;
   user: { id: string; name: string; avatarUrl?: string | null; role: string };
 };
@@ -18,7 +22,11 @@ export function ChatBox() {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const [profileUserId, setProfileUserId] = useState<string | null>(null);
+  const [recording, setRecording] = useState(false);
+  const [uploadingAudio, setUploadingAudio] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
   function load() {
     if (!token) return;
@@ -48,6 +56,61 @@ export function ChatBox() {
     }
   }
 
+  async function startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      chunksRef.current = [];
+      recorder.ondataavailable = (e) => chunksRef.current.push(e.data);
+      recorder.onstop = async () => {
+        stream.getTracks().forEach((t) => t.stop());
+        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        await uploadAndSendAudio(blob);
+      };
+      recorder.start();
+      mediaRecorderRef.current = recorder;
+      setRecording(true);
+    } catch {
+      alert('Não foi possível aceder ao microfone. Verifica as permissões.');
+    }
+  }
+
+  function stopRecording() {
+    mediaRecorderRef.current?.stop();
+    setRecording(false);
+  }
+
+  async function uploadAndSendAudio(blob: Blob) {
+    if (!token) return;
+    if (!CLOUD_NAME || !UPLOAD_PRESET) {
+      alert('Upload de áudio ainda não configurado.');
+      return;
+    }
+    setUploadingAudio(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', blob, 'audio.webm');
+      formData.append('upload_preset', UPLOAD_PRESET);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.secure_url) {
+        await api('/chat/messages', {
+          method: 'POST',
+          token,
+          body: JSON.stringify({ audioUrl: data.secure_url }),
+        });
+        load();
+      } else {
+        alert(data.error?.message || 'Falha ao enviar o áudio.');
+      }
+    } finally {
+      setUploadingAudio(false);
+    }
+  }
+
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm flex flex-col h-[70vh]">
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -72,15 +135,19 @@ export function ChatBox() {
                 >
                   {m.user.name}
                 </button>
-                <div
-                  className={
-                    isMe
-                      ? 'bg-brand-orange text-white rounded-2xl rounded-tr-sm px-4 py-2 text-sm'
-                      : 'bg-brand-light dark:bg-white/10 rounded-2xl rounded-tl-sm px-4 py-2 text-sm'
-                  }
-                >
-                  {m.content}
-                </div>
+                {m.audioUrl ? (
+                  <audio controls src={m.audioUrl} className="max-w-full h-10" />
+                ) : (
+                  <div
+                    className={
+                      isMe
+                        ? 'bg-brand-orange text-white rounded-2xl rounded-tr-sm px-4 py-2 text-sm'
+                        : 'bg-brand-light dark:bg-white/10 rounded-2xl rounded-tl-sm px-4 py-2 text-sm'
+                    }
+                  >
+                    {m.content}
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -96,11 +163,31 @@ export function ChatBox() {
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Escreve uma mensagem..."
-          className="flex-1 bg-brand-light dark:bg-white/5 rounded-full px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40"
+          placeholder={recording ? 'A gravar áudio...' : 'Escreve uma mensagem...'}
+          disabled={recording || uploadingAudio}
+          className="flex-1 bg-brand-light dark:bg-white/5 rounded-full px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-orange/40 disabled:opacity-60"
         />
         <button
-          disabled={sending || !text.trim()}
+          type="button"
+          onClick={recording ? stopRecording : startRecording}
+          disabled={uploadingAudio}
+          className={
+            recording
+              ? 'bg-red-500 text-white p-2.5 rounded-full hover:opacity-90 shrink-0 animate-pulse'
+              : 'bg-brand-light dark:bg-white/10 text-black/60 dark:text-white/60 p-2.5 rounded-full hover:bg-brand-orange/10 hover:text-brand-orange shrink-0'
+          }
+          title={recording ? 'Parar gravação' : 'Gravar áudio'}
+        >
+          {uploadingAudio ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : recording ? (
+            <Square size={16} fill="white" />
+          ) : (
+            <Mic size={16} />
+          )}
+        </button>
+        <button
+          disabled={sending || !text.trim() || recording}
           className="bg-brand-orange text-white p-2.5 rounded-full hover:opacity-90 disabled:opacity-50 shrink-0"
         >
           <Send size={16} />

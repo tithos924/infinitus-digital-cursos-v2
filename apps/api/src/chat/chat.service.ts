@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 
@@ -18,8 +18,15 @@ export class ChatService {
   }
 
   async create(userId: string, dto: CreateMessageDto) {
+    if (!dto.content?.trim() && !dto.audioUrl) {
+      throw new BadRequestException('A mensagem precisa de texto ou áudio');
+    }
     return this.prisma.chatMessage.create({
-      data: { userId, content: dto.content.slice(0, 2000) },
+      data: {
+        userId,
+        content: dto.content?.slice(0, 2000),
+        audioUrl: dto.audioUrl,
+      },
       include: {
         user: { select: { id: true, name: true, avatarUrl: true, role: true } },
       },
