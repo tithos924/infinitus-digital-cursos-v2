@@ -84,6 +84,16 @@ model Module {
   courseId  String
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons   Lesson[]
+  materials ModuleMaterial[]
+}
+
+model ModuleMaterial {
+  id        String   @id @default(uuid())
+  name      String
+  fileUrl   String
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 model Lesson {

@@ -13,6 +13,7 @@ import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { ModulesService } from './modules.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
+import { CreateMaterialDto } from './dto/create-material.dto';
 
 @Controller()
 export class ModulesController {
@@ -43,5 +44,21 @@ export class ModulesController {
   @Delete('modules/:id')
   remove(@Param('id') id: string, @CurrentUser() user: any) {
     return this.modulesService.remove(id, user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('modules/:moduleId/materials')
+  addMaterial(
+    @Param('moduleId') moduleId: string,
+    @CurrentUser() user: any,
+    @Body() dto: CreateMaterialDto,
+  ) {
+    return this.modulesService.addMaterial(moduleId, user.sub, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('materials/:id')
+  removeMaterial(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.modulesService.removeMaterial(id, user.sub);
   }
 }

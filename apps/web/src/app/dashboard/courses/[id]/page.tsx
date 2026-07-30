@@ -4,6 +4,7 @@ import { Plus, Trash2, Video, FileText, GripVertical, ChevronDown, ChevronRight 
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { ImageUploader } from '@/components/ImageUploader';
+import { FileUploader } from '@/components/FileUploader';
 
 type Lesson = {
   id: string;
@@ -14,12 +15,19 @@ type Lesson = {
   order: number;
 };
 
+type Material = {
+  id: string;
+  name: string;
+  fileUrl: string;
+};
+
 type ModuleType = {
   id: string;
   title: string;
   order: number;
   imageUrl?: string | null;
   lessons: Lesson[];
+  materials: Material[];
 };
 
 type Course = {
@@ -138,8 +146,9 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
               </span>
             </button>
             {openModule === m.id && (
-              <div className="border-t border-black/5 dark:border-white/10 px-5 py-4">
+              <div className="border-t border-black/5 dark:border-white/10 px-5 py-4 space-y-5">
                 <LessonList moduleId={m.id} lessons={m.lessons} token={token} onChange={reload} />
+                <MaterialsList moduleId={m.id} materials={m.materials} token={token} onChange={reload} />
               </div>
             )}
           </div>
@@ -150,6 +159,62 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
           </p>
         )}
       </div>
+    </div>
+  );
+}
+
+function MaterialsList({
+  moduleId,
+  materials,
+  token,
+  onChange,
+}: {
+  moduleId: string;
+  materials: Material[];
+  token: string | null;
+  onChange: () => void;
+}) {
+  async function addMaterial(fileUrl: string, fileName: string) {
+    if (!token) return;
+    await api(`/modules/${moduleId}/materials`, {
+      method: 'POST',
+      token,
+      body: JSON.stringify({ name: fileName, fileUrl }),
+    });
+    onChange();
+  }
+
+  async function deleteMaterial(id: string) {
+    if (!token) return;
+    await api(`/materials/${id}`, { method: 'DELETE', token });
+    onChange();
+  }
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-semibold text-black/50 dark:text-white/50 uppercase">Materiais (PDF)</p>
+      {materials.map((mat) => (
+        <div
+          key={mat.id}
+          className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-brand-light dark:bg-white/5"
+        >
+          <a
+            href={mat.fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-sm text-brand-orange font-medium truncate"
+          >
+            <FileText size={15} className="shrink-0" />
+            <span className="truncate">{mat.name}</span>
+          </a>
+          <Trash2
+            size={15}
+            className="text-black/30 hover:text-red-500 cursor-pointer shrink-0"
+            onClick={() => deleteMaterial(mat.id)}
+          />
+        </div>
+      ))}
+      <FileUploader label="Adicionar PDF" onUploaded={addMaterial} />
     </div>
   );
 }

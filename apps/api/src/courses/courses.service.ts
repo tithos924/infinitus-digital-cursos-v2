@@ -57,7 +57,7 @@ export class CoursesService {
     const course = await this.prisma.course.findUnique({
       where: { id },
       include: {
-        modules: { include: { lessons: true }, orderBy: { order: 'asc' } },
+        modules: { include: { lessons: true, materials: true }, orderBy: { order: 'asc' } },
         instructor: { select: { id: true, name: true } },
         _count: { select: { enrollments: true } },
       },

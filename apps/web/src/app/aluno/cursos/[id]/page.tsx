@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { PlayCircle, FileText, ChevronLeft, ChevronDown, ChevronRight, Play } from 'lucide-react';
+import { PlayCircle, FileText, ChevronLeft, ChevronDown, ChevronRight, Play, Download } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,10 +14,17 @@ type Lesson = {
   contentHtml?: string | null;
 };
 
+type Material = {
+  id: string;
+  name: string;
+  fileUrl: string;
+};
+
 type ModuleType = {
   id: string;
   title: string;
   lessons: Lesson[];
+  materials: Material[];
 };
 
 type Course = {
@@ -150,6 +157,22 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
                         {l.title}
                       </button>
                     ))}
+                    {m.materials?.length > 0 && (
+                      <div className="pt-1 space-y-1 border-t border-black/5 dark:border-white/10 mt-1">
+                        {m.materials.map((mat) => (
+                          <a
+                            key={mat.id}
+                            href={mat.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-brand-orange hover:bg-brand-light dark:hover:bg-white/10"
+                          >
+                            <Download size={15} className="shrink-0" />
+                            <span className="truncate">{mat.name}</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
