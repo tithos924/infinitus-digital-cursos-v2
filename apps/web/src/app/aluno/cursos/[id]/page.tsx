@@ -42,6 +42,11 @@ function toEmbedUrl(url: string) {
   return url;
 }
 
+function toDownloadUrl(url: string) {
+  if (!url || !url.includes('/upload/')) return url;
+  return url.replace('/upload/', '/upload/fl_attachment/');
+}
+
 export default function StudentCoursePage({ params }: { params: { id: string } }) {
   const { id } = params;
   const { token } = useAuth();
@@ -162,7 +167,8 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
                         {m.materials.map((mat) => (
                           <a
                             key={mat.id}
-                            href={mat.fileUrl}
+                            href={toDownloadUrl(mat.fileUrl)}
+                            download
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-brand-orange hover:bg-brand-light dark:hover:bg-white/10"

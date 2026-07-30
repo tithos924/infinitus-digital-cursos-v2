@@ -163,6 +163,11 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
   );
 }
 
+function toDownloadUrl(url: string) {
+  if (!url || !url.includes('/upload/')) return url;
+  return url.replace('/upload/', '/upload/fl_attachment/');
+}
+
 function MaterialsList({
   moduleId,
   materials,
@@ -199,7 +204,8 @@ function MaterialsList({
           className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-brand-light dark:bg-white/5"
         >
           <a
-            href={mat.fileUrl}
+            href={toDownloadUrl(mat.fileUrl)}
+            download
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-brand-orange font-medium truncate"
