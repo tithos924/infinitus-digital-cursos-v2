@@ -8,6 +8,41 @@ import { CreateAttachmentDto } from './dto/create-attachment.dto';
 export class LessonsService {
   constructor(private prisma: PrismaService) {}
 
+  async markComplete(lessonId: string, userId: string) {
+    const lesson = await this.prisma.lesson.findUnique({
+      where: { id: lessonId },
+      include: { module: { include: { course: true } } },
+    });
+    if (!lesson) throw new NotFoundException('Aula não encontrada');
+    const courseId = lesson.module.course.id;
+
+    const enrollment = await this.prisma.enrollment.findUnique({
+      where: { userId_courseId: { userId, courseId } },
+    });
+    if (!enrollment) throw new ForbiddenException('Não tens acesso a este curso');
+
+    await this.prisma.lessonProgress.upsert({
+      where: { enrollmentId_lessonId: { enrollmentId: enrollment.id, lessonId } },
+      update: { completed: true, completedAt: new Date() },
+      create: { enrollmentId: enrollment.id, lessonId, completed: true, completedAt: new Date() },
+    });
+
+    const totalLessons = await this.prisma.lesson.count({
+      where: { module: { courseId } },
+    });
+    const completedCount = await this.prisma.lessonProgress.count({
+      where: { enrollmentId: enrollment.id, completed: true },
+    });
+    const progressPct = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+
+    await this.prisma.enrollment.update({
+      where: { id: enrollment.id },
+      data: { progressPct },
+    });
+
+    return { completed: true, progressPct };
+  }
+
   async create(moduleId: string, instructorId: string, dto: CreateLessonDto) {
     await this.assertModuleOwnership(moduleId, instructorId);
     const count = await this.prisma.lesson.count({ where: { moduleId } });

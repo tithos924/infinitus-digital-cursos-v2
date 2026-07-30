@@ -66,6 +66,18 @@ export class CoursesService {
     return course;
   }
 
+  async getMyProgress(courseId: string, userId: string) {
+    const enrollment = await this.prisma.enrollment.findUnique({
+      where: { userId_courseId: { userId, courseId } },
+      include: { lessonProgress: { where: { completed: true }, select: { lessonId: true } } },
+    });
+    if (!enrollment) return { progressPct: 0, completedLessonIds: [] };
+    return {
+      progressPct: enrollment.progressPct,
+      completedLessonIds: enrollment.lessonProgress.map((lp) => lp.lessonId),
+    };
+  }
+
   async update(id: string, instructorId: string, dto: UpdateCourseDto) {
     await this.assertOwnership(id, instructorId);
     return this.prisma.course.update({ where: { id }, data: dto });

@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { PlayCircle, FileText, ChevronLeft, ChevronDown, ChevronRight, Play, Download } from 'lucide-react';
+import { PlayCircle, FileText, ChevronLeft, ChevronDown, ChevronRight, Play, Download, CheckCircle2, Circle } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useAuth } from '@/hooks/useAuth';
@@ -54,6 +54,9 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
   const [activeLesson, setActiveLesson] = useState<Lesson | null>(null);
   const [openModuleId, setOpenModuleId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [progressPct, setProgressPct] = useState(0);
+  const [completedIds, setCompletedIds] = useState<string[]>([]);
+  const [marking, setMarking] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -64,6 +67,10 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
       if (first) setActiveLesson(first);
       if (firstModule) setOpenModuleId(firstModule.id);
     }).catch(() => {});
+    api(`/courses/${id}/my-progress`, { token }).then((p) => {
+      setProgressPct(p.progressPct);
+      setCompletedIds(p.completedLessonIds);
+    }).catch(() => {});
   }, [token, id]);
 
   function selectLesson(l: Lesson) {
@@ -71,12 +78,34 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
     setIsPlaying(false);
   }
 
+  async function markComplete() {
+    if (!token || !activeLesson) return;
+    setMarking(true);
+    try {
+      const result = await api(`/lessons/${activeLesson.id}/complete`, { method: 'POST', token });
+      setProgressPct(result.progressPct);
+      setCompletedIds((prev) => (prev.includes(activeLesson.id) ? prev : [...prev, activeLesson.id]));
+    } finally {
+      setMarking(false);
+    }
+  }
+
+  const isActiveLessonDone = activeLesson ? completedIds.includes(activeLesson.id) : false;
+
   return (
     <div className="space-y-4">
       <Link href="/aluno" className="flex items-center gap-1 text-sm text-black/50 dark:text-white/50 hover:text-black w-fit">
         <ChevronLeft size={16} /> Voltar aos meus cursos
       </Link>
-      <h1 className="text-2xl font-semibold">{course?.title ?? 'A carregar...'}</h1>
+      <div>
+        <div className="flex items-center justify-between mb-1">
+          <h1 className="text-2xl font-semibold">{course?.title ?? 'A carregar...'}</h1>
+          <span className="text-sm font-medium text-brand-orange">{progressPct}%</span>
+        </div>
+        <div className="w-full bg-brand-light dark:bg-white/5 rounded-full h-1.5">
+          <div className="bg-brand-orange h-1.5 rounded-full transition-all" style={{ width: `${progressPct}%` }} />
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 space-y-4">
@@ -116,8 +145,25 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
               Sem vídeo nesta aula
             </div>
           )}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-5">
-            <h2 className="font-medium mb-2">{activeLesson?.title ?? 'Seleciona uma aula'}</h2>
+          <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-5 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="font-medium">{activeLesson?.title ?? 'Seleciona uma aula'}</h2>
+              {activeLesson && (
+                <button
+                  onClick={markComplete}
+                  disabled={marking || isActiveLessonDone}
+                  className={clsx(
+                    'flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium shrink-0 transition-colors',
+                    isActiveLessonDone
+                      ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                      : 'bg-brand-orange text-white hover:opacity-90 disabled:opacity-60',
+                  )}
+                >
+                  {isActiveLessonDone ? <CheckCircle2 size={14} /> : null}
+                  {isActiveLessonDone ? 'Concluída' : marking ? 'A marcar...' : 'Marcar como concluída'}
+                </button>
+              )}
+            </div>
             <p className="text-sm text-black/60 dark:text-white/60 whitespace-pre-wrap">{activeLesson?.contentHtml}</p>
           </div>
         </div>
@@ -140,28 +186,33 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
                 </button>
                 {open && (
                   <div className="space-y-1 pb-2">
-                    {m.lessons.map((l) => (
-                      <button
-                        key={l.id}
-                        onClick={() => selectLesson(l)}
-                        className={clsx(
-                          'w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-lg text-sm transition-colors',
-                          activeLesson?.id === l.id
-                            ? 'bg-brand-orange/10 text-brand-orange'
-                            : 'hover:bg-brand-light dark:hover:bg-white/10 dark:bg-white/5',
-                        )}
-                      >
-                        {l.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={l.imageUrl} alt={l.title} className="w-8 h-8 rounded object-cover shrink-0" />
-                        ) : l.videoUrl ? (
-                          <PlayCircle size={16} className="shrink-0" />
-                        ) : (
-                          <FileText size={16} className="shrink-0" />
-                        )}
-                        {l.title}
-                      </button>
-                    ))}
+                    {m.lessons.map((l) => {
+                      const done = completedIds.includes(l.id);
+                      return (
+                        <button
+                          key={l.id}
+                          onClick={() => selectLesson(l)}
+                          className={clsx(
+                            'w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-lg text-sm transition-colors',
+                            activeLesson?.id === l.id
+                              ? 'bg-brand-orange/10 text-brand-orange'
+                              : 'hover:bg-brand-light dark:hover:bg-white/10 dark:bg-white/5',
+                          )}
+                        >
+                          {done ? (
+                            <CheckCircle2 size={16} className="shrink-0 text-emerald-500" />
+                          ) : l.imageUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={l.imageUrl} alt={l.title} className="w-8 h-8 rounded object-cover shrink-0" />
+                          ) : l.videoUrl ? (
+                            <PlayCircle size={16} className="shrink-0" />
+                          ) : (
+                            <FileText size={16} className="shrink-0" />
+                          )}
+                          <span className="truncate">{l.title}</span>
+                        </button>
+                      );
+                    })}
                     {m.materials?.length > 0 && (
                       <div className="pt-1 space-y-1 border-t border-black/5 dark:border-white/10 mt-1">
                         {m.materials.map((mat) => (

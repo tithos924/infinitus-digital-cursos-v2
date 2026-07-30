@@ -25,6 +25,12 @@ export class LessonsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('lessons/:id/complete')
+  markComplete(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.lessonsService.markComplete(id, user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('modules/:moduleId/lessons')
   create(
     @Param('moduleId') moduleId: string,
