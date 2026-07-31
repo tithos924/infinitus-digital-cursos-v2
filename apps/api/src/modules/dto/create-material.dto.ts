@@ -1,4 +1,4 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateMaterialDto {
   @IsString()
@@ -8,4 +8,8 @@ export class CreateMaterialDto {
   @IsString()
   @MinLength(5)
   fileUrl: string;
+
+  @IsOptional()
+  @IsBoolean()
+  locked?: boolean;
 }

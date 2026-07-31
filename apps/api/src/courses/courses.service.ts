@@ -91,6 +91,9 @@ export class CoursesService {
             ? { id: l.id, title: l.title, order: l.order, locked: true, videoUrl: null, imageUrl: null, contentHtml: null }
             : l,
         ),
+        materials: m.materials.map((mat) =>
+          mat.locked ? { id: mat.id, name: mat.name, locked: true, fileUrl: null } : mat,
+        ),
       };
     });
     return { ...course, modules };

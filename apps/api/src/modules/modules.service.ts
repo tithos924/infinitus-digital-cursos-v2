@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { CreateMaterialDto } from './dto/create-material.dto';
+import { UpdateMaterialDto } from './dto/update-material.dto';
 
 @Injectable()
 export class ModulesService {
@@ -39,8 +40,20 @@ export class ModulesService {
       throw new ForbiddenException('Sem permissão para editar este módulo');
     }
     return this.prisma.moduleMaterial.create({
-      data: { name: dto.name, fileUrl: dto.fileUrl, moduleId },
+      data: { name: dto.name, fileUrl: dto.fileUrl, locked: dto.locked ?? true, moduleId },
     });
+  }
+
+  async updateMaterial(materialId: string, instructorId: string, dto: UpdateMaterialDto) {
+    const material = await this.prisma.moduleMaterial.findUnique({
+      where: { id: materialId },
+      include: { module: { include: { course: true } } },
+    });
+    if (!material) throw new NotFoundException('Material não encontrado');
+    if (material.module.course.instructorId !== instructorId) {
+      throw new ForbiddenException('Sem permissão para editar este material');
+    }
+    return this.prisma.moduleMaterial.update({ where: { id: materialId }, data: dto });
   }
 
   async removeMaterial(materialId: string, instructorId: string) {

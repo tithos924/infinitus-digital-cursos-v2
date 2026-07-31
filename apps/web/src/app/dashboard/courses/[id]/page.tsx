@@ -20,6 +20,7 @@ type Material = {
   id: string;
   name: string;
   fileUrl: string;
+  locked: boolean;
 };
 
 type ModuleType = {
@@ -236,6 +237,16 @@ function MaterialsList({
     onChange();
   }
 
+  async function toggleMaterialLock(id: string, locked: boolean) {
+    if (!token) return;
+    try {
+      await api(`/materials/${id}`, { method: 'PATCH', token, body: JSON.stringify({ locked: !locked }) });
+      onChange();
+    } catch (err: any) {
+      alert(err.message || 'Não foi possível alterar o bloqueio do material.');
+    }
+  }
+
   return (
     <div className="space-y-2">
       <p className="text-xs font-semibold text-black/50 dark:text-white/50 uppercase">Materiais (PDF)</p>
@@ -254,11 +265,26 @@ function MaterialsList({
             <FileText size={15} className="shrink-0" />
             <span className="truncate">{mat.name}</span>
           </a>
-          <Trash2
-            size={15}
-            className="text-black/30 hover:text-red-500 cursor-pointer shrink-0"
-            onClick={() => deleteMaterial(mat.id)}
-          />
+          <span className="flex items-center gap-3 shrink-0">
+            {mat.locked ? (
+              <Lock
+                size={14}
+                className="text-black/30 hover:text-brand-orange cursor-pointer"
+                onClick={() => toggleMaterialLock(mat.id, mat.locked)}
+              />
+            ) : (
+              <Unlock
+                size={14}
+                className="text-emerald-500 hover:text-black/50 cursor-pointer"
+                onClick={() => toggleMaterialLock(mat.id, mat.locked)}
+              />
+            )}
+            <Trash2
+              size={15}
+              className="text-black/30 hover:text-red-500 cursor-pointer"
+              onClick={() => deleteMaterial(mat.id)}
+            />
+          </span>
         </div>
       ))}
       <FileUploader label="Adicionar PDF" onUploaded={addMaterial} />

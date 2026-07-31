@@ -102,6 +102,7 @@ model ModuleMaterial {
   id        String   @id @default(uuid())
   name      String
   fileUrl   String
+  locked    Boolean  @default(true)
   moduleId  String
   module    Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())

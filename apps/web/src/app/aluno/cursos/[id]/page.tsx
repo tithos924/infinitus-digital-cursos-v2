@@ -18,7 +18,8 @@ type Lesson = {
 type Material = {
   id: string;
   name: string;
-  fileUrl: string;
+  fileUrl: string | null;
+  locked: boolean;
 };
 
 type ModuleType = {
@@ -231,19 +232,29 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
                     })}
                     {!m.locked && m.materials?.length > 0 && (
                       <div className="pt-1 space-y-1 border-t border-black/5 dark:border-white/10 mt-1">
-                        {m.materials.map((mat) => (
-                          <a
-                            key={mat.id}
-                            href={toDownloadUrl(mat.fileUrl)}
-                            download
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-brand-orange hover:bg-brand-light dark:hover:bg-white/10"
-                          >
-                            <Download size={15} className="shrink-0" />
-                            <span className="truncate">{mat.name}</span>
-                          </a>
-                        ))}
+                        {m.materials.map((mat) =>
+                          mat.locked ? (
+                            <div
+                              key={mat.id}
+                              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-black/40 dark:text-white/40 opacity-60"
+                            >
+                              <Lock size={15} className="shrink-0" />
+                              <span className="truncate">{mat.name}</span>
+                            </div>
+                          ) : (
+                            <a
+                              key={mat.id}
+                              href={toDownloadUrl(mat.fileUrl as string)}
+                              download
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-brand-orange hover:bg-brand-light dark:hover:bg-white/10"
+                            >
+                              <Download size={15} className="shrink-0" />
+                              <span className="truncate">{mat.name}</span>
+                            </a>
+                          ),
+                        )}
                       </div>
                     )}
                   </div>

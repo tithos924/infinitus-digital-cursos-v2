@@ -14,6 +14,7 @@ import { ModulesService } from './modules.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { CreateMaterialDto } from './dto/create-material.dto';
+import { UpdateMaterialDto } from './dto/update-material.dto';
 
 @Controller()
 export class ModulesController {
@@ -54,6 +55,12 @@ export class ModulesController {
     @Body() dto: CreateMaterialDto,
   ) {
     return this.modulesService.addMaterial(moduleId, user.sub, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('materials/:id')
+  updateMaterial(@Param('id') id: string, @CurrentUser() user: any, @Body() dto: UpdateMaterialDto) {
+    return this.modulesService.updateMaterial(id, user.sub, dto);
   }
 
   @UseGuards(JwtAuthGuard)
