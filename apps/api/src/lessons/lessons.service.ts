@@ -53,6 +53,7 @@ export class LessonsService {
         imageUrl: dto.imageUrl,
         contentHtml: dto.contentHtml,
         order: dto.order ?? count,
+        locked: dto.locked ?? true,
         moduleId,
       },
     });

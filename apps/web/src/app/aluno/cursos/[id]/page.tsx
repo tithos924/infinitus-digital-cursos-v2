@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { PlayCircle, FileText, ChevronLeft, ChevronDown, ChevronRight, Play, Download, CheckCircle2, Circle } from 'lucide-react';
+import { PlayCircle, FileText, ChevronLeft, ChevronDown, ChevronRight, Play, Download, CheckCircle2, Lock } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useAuth } from '@/hooks/useAuth';
@@ -12,6 +12,7 @@ type Lesson = {
   videoUrl?: string | null;
   imageUrl?: string | null;
   contentHtml?: string | null;
+  locked: boolean;
 };
 
 type Material = {
@@ -23,6 +24,7 @@ type Material = {
 type ModuleType = {
   id: string;
   title: string;
+  locked: boolean;
   lessons: Lesson[];
   materials: Material[];
 };
@@ -60,12 +62,12 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
 
   useEffect(() => {
     if (!token) return;
-    api(`/courses/${id}`, { token }).then((c) => {
+    api(`/courses/${id}/student-view`, { token }).then((c) => {
       setCourse(c);
-      const firstModule = c.modules?.[0];
-      const first = firstModule?.lessons?.[0];
-      if (first) setActiveLesson(first);
-      if (firstModule) setOpenModuleId(firstModule.id);
+      const firstUnlockedModule = c.modules?.find((m: ModuleType) => !m.locked) ?? c.modules?.[0];
+      const firstUnlockedLesson = firstUnlockedModule?.lessons?.find((l: Lesson) => !l.locked);
+      if (firstUnlockedLesson) setActiveLesson(firstUnlockedLesson);
+      if (firstUnlockedModule) setOpenModuleId(firstUnlockedModule.id);
     }).catch(() => {});
     api(`/courses/${id}/my-progress`, { token }).then((p) => {
       setProgressPct(p.progressPct);
@@ -74,6 +76,7 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
   }, [token, id]);
 
   function selectLesson(l: Lesson) {
+    if (l.locked) return;
     setActiveLesson(l);
     setIsPlaying(false);
   }
@@ -142,7 +145,7 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
             </div>
           ) : (
             <div className="aspect-video bg-brand-light dark:bg-white/5 rounded-xl2 flex items-center justify-center text-black/30 text-sm">
-              Sem vídeo nesta aula
+              {activeLesson ? 'Sem vídeo nesta aula' : 'Ainda não tens aulas disponíveis'}
             </div>
           )}
           <div className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 p-5 space-y-3">
@@ -177,7 +180,10 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
                   onClick={() => setOpenModuleId(open ? null : m.id)}
                   className="w-full flex items-center justify-between px-2 py-2.5 rounded-lg text-left hover:bg-brand-light dark:hover:bg-white/10"
                 >
-                  <span className="text-xs font-semibold text-black/50 dark:text-white/50 uppercase">{m.title}</span>
+                  <span className="flex items-center gap-1.5 text-xs font-semibold text-black/50 dark:text-white/50 uppercase">
+                    {m.locked && <Lock size={12} />}
+                    {m.title}
+                  </span>
                   {open ? (
                     <ChevronDown size={16} className="text-black/40 dark:text-white/40" />
                   ) : (
@@ -186,20 +192,30 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
                 </button>
                 {open && (
                   <div className="space-y-1 pb-2">
+                    {m.locked && (
+                      <p className="text-xs text-black/40 dark:text-white/40 px-3 py-1">
+                        Este módulo ainda não foi disponibilizado.
+                      </p>
+                    )}
                     {m.lessons.map((l) => {
                       const done = completedIds.includes(l.id);
                       return (
                         <button
                           key={l.id}
                           onClick={() => selectLesson(l)}
+                          disabled={l.locked}
                           className={clsx(
                             'w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-lg text-sm transition-colors',
-                            activeLesson?.id === l.id
-                              ? 'bg-brand-orange/10 text-brand-orange'
-                              : 'hover:bg-brand-light dark:hover:bg-white/10 dark:bg-white/5',
+                            l.locked
+                              ? 'opacity-50 cursor-not-allowed'
+                              : activeLesson?.id === l.id
+                                ? 'bg-brand-orange/10 text-brand-orange'
+                                : 'hover:bg-brand-light dark:hover:bg-white/10 dark:bg-white/5',
                           )}
                         >
-                          {done ? (
+                          {l.locked ? (
+                            <Lock size={16} className="shrink-0" />
+                          ) : done ? (
                             <CheckCircle2 size={16} className="shrink-0 text-emerald-500" />
                           ) : l.imageUrl ? (
                             // eslint-disable-next-line @next/next/no-img-element
@@ -213,7 +229,7 @@ export default function StudentCoursePage({ params }: { params: { id: string } }
                         </button>
                       );
                     })}
-                    {m.materials?.length > 0 && (
+                    {!m.locked && m.materials?.length > 0 && (
                       <div className="pt-1 space-y-1 border-t border-black/5 dark:border-white/10 mt-1">
                         {m.materials.map((mat) => (
                           <a

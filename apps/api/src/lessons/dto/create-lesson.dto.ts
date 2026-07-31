@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateLessonDto {
   @IsString()
@@ -20,4 +20,8 @@ export class CreateLessonDto {
   @IsOptional()
   @IsInt()
   order?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  locked?: boolean;
 }

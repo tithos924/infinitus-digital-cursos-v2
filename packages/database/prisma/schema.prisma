@@ -91,6 +91,7 @@ model Module {
   title     String
   order     Int      @default(0)
   imageUrl  String?
+  locked    Boolean  @default(true)
   courseId  String
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons   Lesson[]
@@ -113,6 +114,7 @@ model Lesson {
   videoUrl    String?
   imageUrl    String?
   contentHtml String?
+  locked      Boolean  @default(true)
   moduleId    String
   module      Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   attachments Attachment[]

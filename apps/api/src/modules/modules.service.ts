@@ -16,6 +16,7 @@ export class ModulesService {
         title: dto.title,
         order: dto.order ?? count,
         imageUrl: dto.imageUrl,
+        locked: dto.locked ?? true,
         courseId,
       },
     });

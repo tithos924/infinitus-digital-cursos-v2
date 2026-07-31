@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, Video, FileText, GripVertical, ChevronDown, ChevronRight } from 'lucide-react';
+import { Plus, Trash2, Video, FileText, GripVertical, ChevronDown, ChevronRight, Lock, Unlock } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { ImageUploader } from '@/components/ImageUploader';
@@ -13,6 +13,7 @@ type Lesson = {
   imageUrl?: string | null;
   contentHtml?: string | null;
   order: number;
+  locked: boolean;
 };
 
 type Material = {
@@ -26,6 +27,7 @@ type ModuleType = {
   title: string;
   order: number;
   imageUrl?: string | null;
+  locked: boolean;
   lessons: Lesson[];
   materials: Material[];
 };
@@ -70,6 +72,12 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
   async function deleteModule(moduleId: string) {
     if (!token) return;
     await api(`/modules/${moduleId}`, { method: 'DELETE', token });
+    reload();
+  }
+
+  async function toggleModuleLock(moduleId: string, locked: boolean) {
+    if (!token) return;
+    await api(`/modules/${moduleId}`, { method: 'PATCH', token, body: JSON.stringify({ locked: !locked }) });
     reload();
   }
 
@@ -132,8 +140,37 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
                 )}
                 {m.title}
                 <span className="text-xs text-black/40 dark:text-white/40 font-normal">({m.lessons.length} aulas)</span>
+                <span
+                  className={
+                    m.locked
+                      ? 'flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50'
+                      : 'flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                  }
+                >
+                  {m.locked ? <Lock size={10} /> : <Unlock size={10} />}
+                  {m.locked ? 'Bloqueado' : 'Disponível'}
+                </span>
               </span>
               <span className="flex items-center gap-3">
+                {m.locked ? (
+                  <Lock
+                    size={16}
+                    className="text-black/30 hover:text-brand-orange"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleModuleLock(m.id, m.locked);
+                    }}
+                  />
+                ) : (
+                  <Unlock
+                    size={16}
+                    className="text-emerald-500 hover:text-black/50"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleModuleLock(m.id, m.locked);
+                    }}
+                  />
+                )}
                 <Trash2
                   size={16}
                   className="text-black/30 hover:text-red-500"
@@ -270,6 +307,12 @@ function LessonList({
     onChange();
   }
 
+  async function toggleLessonLock(lessonId: string, locked: boolean) {
+    if (!token) return;
+    await api(`/lessons/${lessonId}`, { method: 'PATCH', token, body: JSON.stringify({ locked: !locked }) });
+    onChange();
+  }
+
   return (
     <div className="space-y-3">
       {lessons.map((l) => (
@@ -285,7 +328,22 @@ function LessonList({
             )}
             {l.title}
           </span>
-          <Trash2 size={15} className="text-black/30 hover:text-red-500 cursor-pointer" onClick={() => deleteLesson(l.id)} />
+          <span className="flex items-center gap-3">
+            {l.locked ? (
+              <Lock
+                size={14}
+                className="text-black/30 hover:text-brand-orange cursor-pointer"
+                onClick={() => toggleLessonLock(l.id, l.locked)}
+              />
+            ) : (
+              <Unlock
+                size={14}
+                className="text-emerald-500 hover:text-black/50 cursor-pointer"
+                onClick={() => toggleLessonLock(l.id, l.locked)}
+              />
+            )}
+            <Trash2 size={15} className="text-black/30 hover:text-red-500 cursor-pointer" onClick={() => deleteLesson(l.id)} />
+          </span>
         </div>
       ))}
 

@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class UpdateModuleDto {
   @IsOptional()
@@ -13,4 +13,8 @@ export class UpdateModuleDto {
   @IsOptional()
   @IsString()
   imageUrl?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  locked?: boolean;
 }

@@ -66,6 +66,36 @@ export class CoursesService {
     return course;
   }
 
+  async findForStudent(id: string) {
+    const course = await this.findOne(id);
+    const modules = course.modules.map((m) => {
+      if (m.locked) {
+        return {
+          ...m,
+          lessons: m.lessons.map((l) => ({
+            id: l.id,
+            title: l.title,
+            order: l.order,
+            locked: true,
+            videoUrl: null,
+            imageUrl: null,
+            contentHtml: null,
+          })),
+          materials: [],
+        };
+      }
+      return {
+        ...m,
+        lessons: m.lessons.map((l) =>
+          l.locked
+            ? { id: l.id, title: l.title, order: l.order, locked: true, videoUrl: null, imageUrl: null, contentHtml: null }
+            : l,
+        ),
+      };
+    });
+    return { ...course, modules };
+  }
+
   async getMyProgress(courseId: string, userId: string) {
     const enrollment = await this.prisma.enrollment.findUnique({
       where: { userId_courseId: { userId, courseId } },

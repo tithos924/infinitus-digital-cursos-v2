@@ -29,6 +29,12 @@ export class CoursesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':id/student-view')
+  findForStudent(@Param('id') id: string) {
+    return this.coursesService.findForStudent(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id/my-progress')
   getMyProgress(@Param('id') id: string, @CurrentUser() user: any) {
     return this.coursesService.getMyProgress(id, user.sub);
