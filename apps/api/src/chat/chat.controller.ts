@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { ChatService } from './chat.service';
@@ -17,5 +17,10 @@ export class ChatController {
   @Post()
   create(@CurrentUser() user: any, @Body() dto: CreateMessageDto) {
     return this.chatService.create(user.sub, dto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.chatService.remove(id, user.sub, user.role);
   }
 }
