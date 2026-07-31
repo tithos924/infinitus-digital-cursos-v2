@@ -77,8 +77,12 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
 
   async function toggleModuleLock(moduleId: string, locked: boolean) {
     if (!token) return;
-    await api(`/modules/${moduleId}`, { method: 'PATCH', token, body: JSON.stringify({ locked: !locked }) });
-    reload();
+    try {
+      await api(`/modules/${moduleId}`, { method: 'PATCH', token, body: JSON.stringify({ locked: !locked }) });
+      reload();
+    } catch (err: any) {
+      alert(err.message || 'Não foi possível alterar o bloqueio do módulo.');
+    }
   }
 
   async function publish() {
@@ -309,8 +313,12 @@ function LessonList({
 
   async function toggleLessonLock(lessonId: string, locked: boolean) {
     if (!token) return;
-    await api(`/lessons/${lessonId}`, { method: 'PATCH', token, body: JSON.stringify({ locked: !locked }) });
-    onChange();
+    try {
+      await api(`/lessons/${lessonId}`, { method: 'PATCH', token, body: JSON.stringify({ locked: !locked }) });
+      onChange();
+    } catch (err: any) {
+      alert(err.message || 'Não foi possível alterar o bloqueio da aula.');
+    }
   }
 
   return (
