@@ -135,57 +135,68 @@ export default function CourseEditorPage({ params }: { params: { id: string } })
           <div key={m.id} className="bg-white dark:bg-neutral-900 rounded-xl2 border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
             <button
               onClick={() => setOpenModule(openModule === m.id ? null : m.id)}
-              className="w-full flex items-center justify-between px-5 py-4 text-left"
+              className="w-full flex flex-col gap-2 px-4 sm:px-5 py-4 text-left"
             >
-              <span className="flex items-center gap-2 font-medium">
-                <GripVertical size={16} className="text-black/30" />
-                {m.imageUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={m.imageUrl} alt={m.title} className="w-8 h-8 rounded-md object-cover" />
-                )}
-                {m.title}
-                <span className="text-xs text-black/40 dark:text-white/40 font-normal">({m.lessons.length} aulas)</span>
-                <span
-                  className={
-                    m.locked
-                      ? 'flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50'
-                      : 'flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                  }
-                >
-                  {m.locked ? <Lock size={10} /> : <Unlock size={10} />}
-                  {m.locked ? 'Bloqueado' : 'Disponível'}
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-2 font-medium min-w-0">
+                  {m.imageUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={m.imageUrl} alt={m.title} className="w-8 h-8 rounded-md object-cover shrink-0" />
+                  )}
+                  <span className="truncate">{m.title}</span>
                 </span>
-              </span>
-              <span className="flex items-center gap-3">
-                {m.locked ? (
-                  <Lock
-                    size={16}
-                    className="text-black/30 hover:text-brand-orange"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleModuleLock(m.id, m.locked);
-                    }}
-                  />
+                {openModule === m.id ? (
+                  <ChevronDown size={18} className="shrink-0" />
                 ) : (
-                  <Unlock
+                  <ChevronRight size={18} className="shrink-0" />
+                )}
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-2">
+                  <span className="text-xs text-black/40 dark:text-white/40 font-normal">
+                    {m.lessons.length} aulas
+                  </span>
+                  <span
+                    className={
+                      m.locked
+                        ? 'flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50'
+                        : 'flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                    }
+                  >
+                    {m.locked ? <Lock size={10} /> : <Unlock size={10} />}
+                    {m.locked ? 'Bloqueado' : 'Disponível'}
+                  </span>
+                </span>
+                <span className="flex items-center gap-4 shrink-0">
+                  {m.locked ? (
+                    <Lock
+                      size={16}
+                      className="text-black/30 hover:text-brand-orange"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleModuleLock(m.id, m.locked);
+                      }}
+                    />
+                  ) : (
+                    <Unlock
+                      size={16}
+                      className="text-emerald-500 hover:text-black/50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleModuleLock(m.id, m.locked);
+                      }}
+                    />
+                  )}
+                  <Trash2
                     size={16}
-                    className="text-emerald-500 hover:text-black/50"
+                    className="text-black/30 hover:text-red-500"
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleModuleLock(m.id, m.locked);
+                      deleteModule(m.id);
                     }}
                   />
-                )}
-                <Trash2
-                  size={16}
-                  className="text-black/30 hover:text-red-500"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteModule(m.id);
-                  }}
-                />
-                {openModule === m.id ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-              </span>
+                </span>
+              </div>
             </button>
             {openModule === m.id && (
               <div className="border-t border-black/5 dark:border-white/10 px-5 py-4 space-y-5">
